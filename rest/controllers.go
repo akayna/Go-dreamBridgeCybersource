@@ -15,12 +15,9 @@ import (
 // Constants
 var headerSignatureAlgorithm = "HmacSHA256"
 
-//var headerHeadersPostPut = "host date (request-target) digest v-c-merchant-id"
-//var headerHeadersGet = "host date (request-target) v-c-merchant-id"
-
 // Utitlizando o console, percebi que o campo date não é enviado.
-var headerHeadersPostPut = "host (request-target) digest v-c-merchant-id"
-var headerHeadersGet = "host (request-target) v-c-merchant-id"
+var headerHeadersPostPut = "host date (request-target) digest v-c-merchant-id"
+var headerHeadersGet = "host date (request-target) v-c-merchant-id"
 
 var host = "apitest.cybersource.com" // Ambiente de teste
 //var host = "api.cybersource.com" // Ambiente produtivo
@@ -201,7 +198,7 @@ func GetGetHeader(credentials *cybersourcecommons.CyberSourceCredential, endpoin
 func (header *RestfullHeader) getMapString() map[string]string {
 	headerMap := map[string]string{
 		"v-c-merchant-id": header.MerchantID,
-		"v-c-date":        header.Date, // Na documentação esse campo seria Date:
+		"Date":            header.Date,
 		"host":            header.Host,
 		"digest":          header.Digest,
 		"signature":       header.Signature.getString(),
@@ -218,7 +215,7 @@ func getHeader(credentials *commons.CyberSourceCredential, host, payload, verb, 
 	var header RestfullHeader
 
 	// Get actual system time into the RFC1123 format
-	actualDateTime := timeutils.GetActualGMTDate()
+	var actualDateTime = timeutils.GetActualGMTDate()
 	header.Date = actualDateTime
 
 	// Set the MID
@@ -281,7 +278,7 @@ func calculateSignature(sharedSecretKey, host, date, target, mid, verb, digestSt
 	var headers string
 
 	signatureString := "host: " + host +
-		//"\ndate: " + date +
+		"\ndate: " + date +
 		"\n(request-target): " + strings.ToLower(verb) + " " + target
 
 	switch verb {
