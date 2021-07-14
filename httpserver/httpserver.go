@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -84,10 +85,13 @@ func main() {
 	c := &controller{logger: logger, nextRequestID: func() string { return strconv.FormatInt(time.Now().UnixNano(), 36) }}
 	router := http.NewServeMux()
 
-	router.HandleFunc("/", c.index)
+	//router.HandleFunc("/", c.index)
 	router.HandleFunc("/healthz", c.healthz)
 
 	router.HandleFunc("/getFlexAPIKey", getFlexAPIKey)
+
+	directory := flag.String("d", "./", "the directory of static file to host")
+	router.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), http.FileServer(http.Dir(*directory))))
 
 	flag.Parse()
 
