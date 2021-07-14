@@ -5,6 +5,7 @@ import (
 	"Go-dreamBridgeCybersource/rest/flexAPI"
 	"Go-dreamBridgeUtils/jsonfile"
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -89,6 +90,7 @@ func main() {
 	router.HandleFunc("/healthz", c.healthz)
 
 	router.HandleFunc("/getFlexAPIKey", getFlexAPIKey)
+	router.HandleFunc("/getFlexAPIKeyCrypto", getFlexAPIKeyCrypto)
 
 	directory := flag.String("d", "./", "the directory of static file to host")
 	router.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), http.FileServer(http.Dir(*directory))))
@@ -167,11 +169,38 @@ func getFlexAPIKey(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(msg)
 	fmt.Printf("Key: %+v\n", generatedKey)
-	fmt.Printf("KeyID: %+v\n", generatedKey.KeyID)
-	fmt.Printf("Der: %+v\n", generatedKey.Der)
-	fmt.Printf("JWK: %+v\n", generatedKey.Jwk)
+	fmt.Printf("KeyID: %+v\n", *generatedKey.KeyID)
 
 	w.Write([]byte(*generatedKey.KeyID))
+}
+
+// getFlexAPIKey - Generate ont key for the FlexAPI and send it to the browser
+func getFlexAPIKeyCrypto(w http.ResponseWriter, req *http.Request) {
+	generatedKey, msg, err := flexAPI.GenerateRsaOaep256Key(&credentials.CyberSourceCredential, nil)
+
+	if err != nil {
+		log.Println("main - Error generating key.")
+		log.Println(err)
+		return
+	}
+
+	fmt.Println(msg)
+	fmt.Printf("Key: %+v\n", *generatedKey)
+	fmt.Printf("KeyID: %+v\n", *generatedKey.KeyID)
+	fmt.Printf("JWK: %+v\n", *generatedKey.Jwk)
+
+	responseJSON, err := json.Marshal(generatedKey)
+
+	if err != nil {
+		errorString := "getFlexAPIKeyCrypto - Erro converting struct to JSON - " + err.Error()
+		log.Printf("getFlexAPIKeyCrypto - Erro converting struct to JSON - %s", err)
+		w.Write([]byte(errorString))
+		return
+	}
+
+	fmt.Println("Json: ", string(responseJSON))
+
+	w.Write([]byte(responseJSON))
 }
 
 // main_test.go

@@ -35,51 +35,121 @@ function getCardTokenKey() {
 
 // Generates one cardtoken using the card form and the KeyID generated into the backend
 function generateCardToken() {
-    console.log("generateCardToken");
+  console.log("generateCardToken");
 
-    var cardTokenData = {
-        keyId: document.getElementById('keyID').value, 
-        cardInfo: {
-            cardNumber: document.getElementById("ccnum").value,
-            cardExpirationMonth: document.getElementById("expmonth").value,
-            cardExpirationYear: document.getElementById("expyear").value,
-            cardType: document.getElementById("type").value
-        }
+  var cardTokenData = {
+      keyId: document.getElementById('keyID').value, 
+      cardInfo: {
+          cardNumber: document.getElementById("ccnum").value,
+          cardExpirationMonth: document.getElementById("expmonth").value,
+          cardExpirationYear: document.getElementById("expyear").value,
+          cardType: document.getElementById("type").value
+      }
+  };
+
+  var payload = JSON.stringify(cardTokenData);
+  console.log("Payload: " + payload);
+
+  var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "https://apitest.cybersource.com/flex/v1/tokens",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json",
+        "Accept": "*/*"
+      },
+      "processData": false,
+      "data": payload
+  };
+    
+    $.ajax(settings).done(function (response, status) {
+
+      console.log("Status: "+ status);
+
+      console.log("Response: ");
+      console.log(response);
+
+      setCardToken(response.token);
+
+      disableCardInputs();
+
+      window.alert("CardToken gerado com sucesso:\n"+response.token);
+
+      return false;
+    }).fail(failResponse);
+
+  return false;
+}
+
+// Asks the backend for one KeyID with cryptography to generate one cardToken
+function getCardTokenKeyCrypto() {
+  console.log("getCardTokenKey");
+
+  var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": "http://localhost:5000/getFlexAPIKeyCrypto",
+      "method": "GET",
+      "headers": {
+        "Accept": "*/*",
+        "Cache-Control": "no-cache",
+        //"Host": "localhost:5000",
+        //"accept-encoding": "gzip, deflate",
+        //"Connection": "keep-alive",
+        "cache-control": "no-cache"
+      }
     };
+    
+  $.ajax(settings).done(function (response, status) {
 
-    var payload = JSON.stringify(cardTokenData);
-    console.log("Payload: " + payload);
+    console.log("Status: "+ status);
 
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://apitest.cybersource.com/flex/v1/tokens",
-        "method": "POST",
-        "headers": {
-          "Content-Type": "application/json",
-          "Accept": "*/*"
-        },
-        "processData": false,
-        "data": payload
-    };
-      
-      $.ajax(settings).done(function (response, status) {
+    console.log("keyID: "+ response);
 
-        console.log("Status: "+ status);
+    setKeyID(response);
 
-        console.log("Response: ");
-        console.log(response);
-
-        setCardToken(response.token);
-
-        disableCardInputs();
-
-        window.alert("CardToken gerado com sucesso:\n"+response.token);
-
-        return false;
-      }).fail(failResponse);
+    enableCardInputs();
 
     return false;
+  }).fail(failResponse);
+
+  return false;
+}
+
+function generateCardTokenCrypto() {
+  console.log("generateCardTokenCrypto: ");
+
+  var tokenKeyObj = JSON.parse(document.getElementById('keyID').value);
+
+  const options = {
+    kid: tokenKeyObj.keyId,
+    keystore: tokenKeyObj.jwk,
+    encryptionType: 'RsaOaep256', // ensure this matches the encryptionType you specified when creating your key
+    cardInfo: {
+      cardNumber: document.getElementById("ccnum").value,
+      cardExpirationMonth: document.getElementById("expmonth").value,
+      cardExpirationYear: document.getElementById("expyear").value,
+      cardType: document.getElementById("type").value
+    }
+  };
+ 
+  FLEX.createToken(options, response => {
+    if (response.error) {
+
+      failResponse(response, status);
+      
+    } else {
+      console.log("Response object:");
+      console.log(response);
+  
+      setCardToken(response.token);
+  
+      disableCardInputs();
+  
+      window.alert("CardToken gerado com sucesso:\n"+response.token);
+    }
+  });
 }
 
 // Treats the one fail response.
