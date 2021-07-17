@@ -89,8 +89,12 @@ func main() {
 	//router.HandleFunc("/", c.index)
 	router.HandleFunc("/healthz", c.healthz)
 
+	// FlexAPI services
 	router.HandleFunc("/getFlexAPIKey", getFlexAPIKey)
 	router.HandleFunc("/getFlexAPIKeyCrypto", getFlexAPIKeyCrypto)
+
+	// Microform services
+	router.HandleFunc("/getMicroformContext", getMicroformContext)
 
 	directory := flag.String("d", "./", "the directory of static file to host")
 	router.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), http.FileServer(http.Dir(*directory))))
@@ -201,6 +205,34 @@ func getFlexAPIKeyCrypto(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Json: ", string(responseJSON))
 
 	w.Write([]byte(responseJSON))
+}
+
+// getMicroformKey - Generate one microfom key and send back to the frontend
+func getMicroformContext(w http.ResponseWriter, req *http.Request) {
+	fmt.Println("getMicroformContext")
+
+	var targetOrigin = ""
+	if req.TLS == nil {
+		targetOrigin += "http://"
+	} else {
+		targetOrigin += "https://"
+	}
+
+	targetOrigin += req.Host
+
+	fmt.Println("targetOrigin: " + targetOrigin)
+
+	generatedKey, msg, err := flexAPI.GenerateMicroformKey(&credentials.CyberSourceCredential, targetOrigin)
+
+	if err != nil {
+		log.Println("getMicroformContext - Error generating key.")
+		log.Println(err)
+		return
+	}
+
+	fmt.Println(msg)
+
+	w.Write([]byte(*generatedKey.KeyID))
 }
 
 // main_test.go

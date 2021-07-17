@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <script src="https://flex.cybersource.com/cybersource/assets/microform/0.11/flex-microform.min.js"></script>
+  <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script language="javascript" type="text/javascript" src="../JavaScripts/microform.js"></script>
+  <script language="javascript" type="text/javascript" src="../JavaScripts/utils.js"></script>
+
+  <head>
+      <title>Sample Checkout</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+      <style>
+          #number-container, #securityCode-container {
+              height: 38px;
+          }
+
+          .flex-microform-focused {
+              background-color: #fff;
+              border-color: #80bdff;
+              outline: 0;
+              box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+          }
+      </style>
+  </head>
+
+  <body>
+    <div class="container card">
+      <div class="card-body">
+          <h1>Checkout</h1>
+          <div id="errors-output" role="alert"></div>
+          <form action="token.php" id="my-sample-form" method="post">
+              <div class="form-group">
+
+                  <label id="cardNumber-label">Card Number</label>
+                  <div id="number-container" class="form-control"></div>
+
+                  <label for="securityCode-container">Security Code</label>
+                  <div id="securityCode-container" class="form-control"></div>
+                  
+              </div>
+
+              <div class="form-row">
+                  <div class="form-group col-md-6">
+                      <label for="expMonth">Expiry month</label>
+                      <select id="expMonth" class="form-control">
+                          <option>01</option>
+                          <option>02</option>
+                          <option>03</option>
+                          <option>04</option>
+                          <option>05</option>
+                          <option>06</option>
+                          <option>07</option>
+                          <option>08</option>
+                          <option>09</option>
+                          <option>10</option>
+                          <option>11</option>
+                          <option>12</option>
+                      </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                      <label for="expYear">Expiry year</label>
+                      <select id="expYear" class="form-control">
+                          <option>2022</option>
+                          <option>2023</option>
+                          <option>2024</option>
+                          <option>2025</option>
+                      </select>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                    <label for="type">Type</label>
+                    <select id="type" name="type" disabled>
+                      <option value="001">Visa</option>
+                      <option value="002">Master</option>
+                      <option value="003">Amex</option>
+                      <option value="004">Discover</option>
+                      <option value="054">Elo</option>
+                    </select>
+                  </div>
+              </div>
+
+              <button type="button" id="tokenizeBtn" class="btn btn-primary">Tokenize</button>
+          </form>
+      </div>
+    </div>
+    <div id="hiddenDataDiv" hidden>
+      <input type="text" id="microformContext" name="microformContext" >
+      <input type="text" id="cardToken" name="cardToken" >
+      <input type="hidden" id="flexresponse" name="flexresponse">
+    </div>
+  </body>
+
+  <script>
+    window.onload = function(){
+      getMicroformContext();
+      setupMicroform();
+    };
+  </script>
+
+</html>

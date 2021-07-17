@@ -152,16 +152,6 @@ function generateCardTokenCrypto() {
   });
 }
 
-// Treats the one fail response.
-function failResponse(response, status) {
-  console.log("Status: "+ status);
-
-  console.log("Response object:");
-
-  console.log(response);
-
-}
-
 function setKeyID(keyID) {
   document.getElementById("keyID").setAttribute('value',keyID);
 }
@@ -170,6 +160,7 @@ function setCardToken(cardToken) {
   document.getElementById("cardToken").setAttribute('value',cardToken);
 }
 
+// Enable all card inputs and buttons fields
 function enableCardInputs() {
   document.getElementById("ccnum").disabled = false;
   document.getElementById("expmonth").disabled = false;
@@ -178,7 +169,7 @@ function enableCardInputs() {
   document.getElementById("tokenizeBtn").disabled = false;
 }
 
-// Disable all inputs and buttons fields
+// Disable all card inputs and buttons fields
 function disableCardInputs() {
   document.getElementById("ccnum").disabled = true;
   document.getElementById("expmonth").disabled = true;
