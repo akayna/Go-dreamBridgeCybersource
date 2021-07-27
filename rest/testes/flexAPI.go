@@ -11,7 +11,7 @@ import (
 func main() {
 	var credentials commons.Credentials
 
-	err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "rafaelcunha.json", &credentials)
+	err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "vileve.json", &credentials)
 
 	if err != nil {
 		log.Println("Erro ao ler credenciais.")
@@ -30,7 +30,6 @@ func main() {
 
 	fmt.Println(msg)
 	fmt.Printf("Key: %+v\n", generatedKey)
-	fmt.Printf("KeyID: %+v\n", generatedKey.KeyID)
-	fmt.Printf("Der: %+v\n", generatedKey.Der)
-	fmt.Printf("JWK: %+v\n", generatedKey.Jwk)
+	fmt.Printf("KeyID: %+v\n", *generatedKey.KeyID)
+
 }

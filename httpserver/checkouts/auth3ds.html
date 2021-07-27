@@ -1,0 +1,262 @@
+<html>
+  <head>
+    <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../JavaScripts/threeds.js"></script>
+    <script language="javascript" type="text/javascript" src="../JavaScripts/utils.js"></script>
+
+    <link rel="stylesheet" href="completo.css">
+    <title>3DS - Sample Checkout</title>
+  </head>
+  <body>
+      <div class="row">
+          <div class="col-75">
+            <div class="container">
+              <form id="cardForm">
+                <div class="row">
+                  <div class="col-50">
+                    <h3>Payment</h3>
+                    <label for="cardNumber">Credit card number</label>
+                    <input type="text" id="cardNumber" name="cardnumber" placeholder="1111222233334444" value= "4000000000001091" disabled>
+        
+                    <div class="row">
+                      <div class="col-25">
+                          <label for="expMonth">Exp Month</label>
+                          <select id="expMonth" name="expMonth" disabled>
+                              <option value="01">Janeiro</option>
+                              <option value="02">Fevereiro</option>
+                              <option value="03">Março</option>
+                              <option value="04">Abril</option>
+                              <option value="05">Maio</option>
+                              <option value="06">Junho</option>
+                              <option value="07">Julho</option>
+                              <option value="08">Agosto</option>
+                              <option value="09">Setembro</option>
+                              <option value="10">Outubro</option>
+                              <option value="11">Novembro</option>
+                              <option value="12">Dezembro</option>
+                            </select>
+                          </div>
+
+                        <div class="col-25">
+                          <label for="expYear">Exp Year</label>
+                          <select id="expYear" name="expYear" disabled>
+                            <option value="2029">2029</option>
+                              <option value="2028">2028</option>
+                              <option value="2027">2027</option>
+                              <option value="2026">2026</option>
+                              <option value="2025">2025</option>
+                              <option value="2024">2024</option>
+                              <option value="2023">2023</option>
+                              <option value="2022">2022</option>
+                          </select>
+                        </div>
+
+                        <div class="col-25">
+                          <label for="type">Type</label>
+                          <select id="type" name="type" disabled>
+                              <option value="001">Visa</option>
+                              <option value="002">Master</option>
+                              <option value="003">Amex</option>
+                              <option value="004">Discover</option>
+                              <option value="054">Elo</option>
+                          </select>
+                        </div>
+
+                        <div class="col-25">
+                          <label for="overridePaymentMethod">Payment Method</label>
+                          <select id="overridePaymentMethod" name="overridePaymentMethod" disabled>
+                              <option value="CR">Credit</option>
+                              <option value="DB">Debit</option>
+                          </select>
+                        </div>
+
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-75">
+            <div class="container">
+              <form id="clientReferenceInformationForm">
+        
+                <div class="row">
+                  <div class="col-50">
+
+                    <label for="clientReferenceCode">Client Reference Code:</label>
+                    <input type="text" id="referenceCode" name="referenceCode" placeholder="ABC1234" disabled>
+
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-75">
+            <div class="container">
+              <form id="orderInfoForm">
+                <div class="row">
+                  <div class="col-50">
+                    <h3>Order Info</h3>
+
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" value= "Emanuel" disabled>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" value= "Justino da Silva" disabled>
+                      </div>
+                    </div>
+
+                    <label for="address1">Address:</label>
+                    <input type="text" id="address1" name="address1" value= "Rua Luiz Queiroz, 234 ap. 32" disabled>
+
+                    <label for="address2">Address Complement:</label>
+                    <input type="text" id="address2" name="address2" value= "Jardim Lucinilda" disabled>
+
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="locality">City:</label>
+                        <input type="text" id="locality" name="locality" value= "São Paulo" disabled>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="administrativeArea">State:</label>
+                        <select id="administrativeArea" name="administrativeArea" disabled>
+                            <option value="SP">São Paulo</option>
+                            <option value="MG">Minas Gerais</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                            <option value="ES">Espírito Santo</option>
+                          </select>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="country">County:</label>
+                        <select id="country" name="country" disabled>
+                          <option value="BR">Brasil</option>
+                          <option value="US">United States of America</option>
+                        </select>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="postalCode">Postal Code:</label>
+                        <input type="text" id="postalCode" name="postalCode" value= "04768-986" disabled>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="email">Email:</label>
+                        <input type="text" id="email" name="email" value= "test@test.com" disabled>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="mobilePhone">Mobile:</label>
+                        <input type="text" id="mobilePhone" name="mobilePhone" value= "(11) 98763-1287" disabled>
+                      </div>
+
+                    </div>
+
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="totalAmount">Total Amount:</label>
+                        <input type="text" id="totalAmount" name="totalAmount" value= "4.20" disabled>
+                      </div>
+
+                      <div class="col-25">
+                        <label for="currency">Currency:</label>
+                        <input type="text" id="currency" name="currency" value= "BRL" disabled>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+    <div class="row">
+      <div class="col-75">
+        <div class="container">
+          <form id="buttonFrom">
+    
+            <div class="row">
+              <div class="col-50">
+              
+                <div>
+                  <button id="authBtn" type='button' class="btn" disabled>Authenticate</button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-50">
+              
+                <div>
+                  <button id="stepUpBtn" type='button' class="btn" style="display: none;" disabled>Open Challenge</button>
+                </div>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-75">
+        <div class="container">
+          
+          <iframe name="ddc-iframe" height="1" width="1" style="display: none;"></iframe>
+          <form id="ddc-form" target="ddc-iframe" method="POST">
+            <input type="hidden" id="JWT_ddc" name="JWT">
+          </form>
+
+          <iframe name="step-up-iframe" id="step-up-iframe"></iframe>
+          <form name="step-up-form" id="step-up-form" target="step-up-iframe" method="POST">
+            <input type="hidden" id="JWT_step" name="JWT">
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <div id="hiddenDataDiv" hidden>
+      <input type="text" id="referenceID" name="referenceID" >
+      <input type="text" id="pareq" name="pareq" >
+      <input type="text" id="stepUpUrl" name="stepUpUrl" >
+      <input type="text" id="accessToken" name="accessToken" >
+    </div>
+  </body>
+
+  <script>
+    window.onload = function(){
+      document.getElementById('authBtn').onclick = setupPayerAuth;
+      document.getElementById('stepUpBtn').onclick = executeChallenge;
+
+      var stepUpForm = document.getElementById("step-up-form")
+      stepUpForm.addEventListener("submit",testeStepupcallback,true);
+
+      /*if(stepUpForm.addEventListener) {
+        stepUpForm.addEventListener("submit",testeStepupcallback,false);
+      } else {
+        stepUpForm.attachEvent('onsubmit', formvalidate);
+      }*/
+
+      setRandomReferenceCode();
+
+      enableCardInputs();
+      enableAuthFields();
+    };
+  </script>
+</html>

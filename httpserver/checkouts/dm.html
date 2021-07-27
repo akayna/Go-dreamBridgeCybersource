@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script language="javascript" type="text/javascript" src="../JavaScripts/microform.js"></script>
+  <script language="javascript" type="text/javascript" src="../JavaScripts/utils.js"></script>
+
+  <head>
+      <title>Decision Manage - Sample Checkout</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+      <style>
+          #number-container, #securityCode-container {
+              height: 38px;
+          }
+
+          .flex-microform-focused {
+              background-color: #fff;
+              border-color: #80bdff;
+              outline: 0;
+              box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+          }
+      </style>
+  </head>
+
+  <body>
+    <div class="container card">
+      <h1>Checkout</h1>
+      <div class="card-body">
+          <form action="token.php" id="my-sample-form" method="post">
+            <div class="form-group">
+                <h2>Card Data</h2>
+                <div class="form-group">
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label id="cardName-label">Card Name</label>
+                      <div id="cardName-container" >
+                        <input type="text" class="form-control" id="cardName" name="cardName" placeholder="Name on card" value= "Nome Teste" disabled>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label id="cardNumber-label">Card Number</label>
+                      <div id="number-container" >
+                        <input type="text" class="form-control" id="cardNumber" name="cardnumber" placeholder="1111222233334444" value= "4111111111111111" disabled>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                      <label for="securityCode-container">Security Code</label>
+                      <div id="securityCode-container">
+                        <input type="text" class="form-control" id="securityCode" name="securityCode" placeholder="123" value= "123" disabled>
+                      </div>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="expMonth">Expiry month</label>
+                        <select id="expMonth" class="form-control" disabled>
+                            <option>01</option>
+                            <option>02</option>
+                            <option>03</option>
+                            <option>04</option>
+                            <option>05</option>
+                            <option>06</option>
+                            <option>07</option>
+                            <option>08</option>
+                            <option>09</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="expYear">Expiry year</label>
+                        <select id="expYear" class="form-control" disabled>
+                            <option>2022</option>
+                            <option>2023</option>
+                            <option>2024</option>
+                            <option>2025</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                      <label for="type">Type</label><BR>
+                      <select id="type" name="type" disabled>
+                        <option value="001">Visa</option>
+                        <option value="002">Master</option>
+                        <option value="003">Amex</option>
+                        <option value="004">Discover</option>
+                        <option value="054">Elo</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="form-row col-md-6">
+                  <div class="form-group col-md-3">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" placeholder="123.456.789-12" value= "191.191.191-00" disabled>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h2>Billing Address</h2>
+
+              <div class="form-row">
+
+                <div class="form-group col-md-6">
+                  <label for="firstName">First Name</label>
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Name" value="Luiz" disabled>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="lastName">Last Name</label>
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" value="Silveira Neto" disabled>
+                </div>
+
+              </div>
+
+              <div class="form-row">
+
+                <div class="form-group col-md-6">
+                  <label for="address1">Address 1</label>
+                  <input type="text" class="form-control" id="address1" name="address1" placeholder="Rua Luiz Vieira 134" value="Rua Luiz Vieira 134" disabled>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <label for="address2">Address 2</label>
+                  <input type="text" class="form-control" id="address2" name="address2" placeholder="apto. 34 - Vila Guarani" value="apto. 34 - Vila Guarani" disabled>
+                </div>
+
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="locality">Locality</label>
+                  <input type="text" id="locality" name="locality" placeholder="São Paulo" value="São Paulo" disabled>  
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="administrativeArea">Administrative Area:</label>
+                  <input type="text" id="administrativeArea" name="administrativeArea" placeholder="SP" value="SP" disabled>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="country">Country</label>
+                  <input type="text" id="country" name="country" placeholder="BR" value="BR" disabled>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="postalCode">Postal Code</label>
+                  <input type="text" id="postalCode" name="postalCode" placeholder="09876098" value="09876098" disabled>
+                </div>
+
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="email">Email</label><BR>
+                  <input type="text" id="email" name="email" placeholder="teste@teste.com" value="aprove@teste.rafael.com" disabled> 
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="phoneNumber">Phone Number</label>
+                  <input type="text" id="phoneNumber" name="phoneNumber" placeholder="(011) 2102-0439" value="(011) 2102-0439" disabled>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="mobilePhone">Mobile Number</label>
+                  <input type="text" id="mobilePhone" name="mobilePhone" placeholder="(011) 98768-3332" value="(011) 98768-3332" disabled>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <h2>Order Information</h2>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="orderNumber">Order Number</label>
+                  <input type="text" id="orderNumber" name="orderNumber" disabled>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="totalAmount">Total Amount</label>
+                  <input type="text" id="totalAmount" name="totalAmount" placeholder="4.20" value="4.20" disabled>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <label for="currency">Currency</label><BR>
+                  <select id="currency" name="currency" disabled>
+                      <option value="BRL">BRL</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <button type="button" id="analyseBtn" class="btn btn-primary">Analyse on Decision Manager</button>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+    <div id="hiddenDataDiv" hidden>
+      <input type="text" id="microformContext" name="microformContext" >
+      <input type="text" id="cardToken" name="cardToken" >
+      <input type="hidden" id="flexresponse" name="flexresponse">
+    </div>
+  </body>
+
+  <script>
+    window.onload = function(){
+      getMicroformContext();
+      setupMicroform();
+    };
+  </script>
+
+</html>

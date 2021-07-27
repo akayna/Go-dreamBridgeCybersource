@@ -40,9 +40,9 @@ function generateCardToken() {
   var cardTokenData = {
       keyId: document.getElementById('keyID').value, 
       cardInfo: {
-          cardNumber: document.getElementById("ccnum").value,
-          cardExpirationMonth: document.getElementById("expmonth").value,
-          cardExpirationYear: document.getElementById("expyear").value,
+          cardNumber: document.getElementById("cardNumber").value,
+          cardExpirationMonth: document.getElementById("expMonth").value,
+          cardExpirationYear: document.getElementById("expYear").value,
           cardType: document.getElementById("type").value
       }
   };
@@ -127,9 +127,9 @@ function generateCardTokenCrypto() {
     keystore: tokenKeyObj.jwk,
     encryptionType: 'RsaOaep256', // ensure this matches the encryptionType you specified when creating your key
     cardInfo: {
-      cardNumber: document.getElementById("ccnum").value,
-      cardExpirationMonth: document.getElementById("expmonth").value,
-      cardExpirationYear: document.getElementById("expyear").value,
+      cardNumber: document.getElementById("cardNumber").value,
+      cardExpirationMonth: document.getElementById("expMonth").value,
+      cardExpirationYear: document.getElementById("expYear").value,
       cardType: document.getElementById("type").value
     }
   };
@@ -162,18 +162,22 @@ function setCardToken(cardToken) {
 
 // Enable all card inputs and buttons fields
 function enableCardInputs() {
-  document.getElementById("ccnum").disabled = false;
-  document.getElementById("expmonth").disabled = false;
-  document.getElementById("expyear").disabled = false;
+  document.getElementById("cardNumber").disabled = false;
+  document.getElementById("expMonth").disabled = false;
+  document.getElementById("expYear").disabled = false;
   document.getElementById("type").disabled = false;
-  document.getElementById("tokenizeBtn").disabled = false;
+
+  if (document.getElementById("tokenizeBtn") != null) 
+    document.getElementById("tokenizeBtn").disabled = false;
 }
 
 // Disable all card inputs and buttons fields
 function disableCardInputs() {
-  document.getElementById("ccnum").disabled = true;
-  document.getElementById("expmonth").disabled = true;
-  document.getElementById("expyear").disabled = true;
+  document.getElementById("cardNumber").disabled = true;
+  document.getElementById("expMonth").disabled = true;
+  document.getElementById("expYear").disabled = true;
   document.getElementById("type").disabled = true;
-  document.getElementById("tokenizeBtn").disabled = true;
+  
+  if (document.getElementById("tokenizeBtn") != null) 
+    document.getElementById("tokenizeBtn").disabled = true;
 }

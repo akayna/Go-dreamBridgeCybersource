@@ -3,11 +3,13 @@ package main
 import (
 	"Go-dreamBridgeCybersource/rest/commons"
 	"Go-dreamBridgeCybersource/rest/flexAPI"
+	"Go-dreamBridgeCybersource/rest/threeds"
 	"Go-dreamBridgeUtils/jsonfile"
 	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -66,7 +68,11 @@ var credentials commons.Credentials
 
 func main() {
 
+	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
+	logger.Printf("Loading credentials...")
+
 	err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "rafaelcunha.json", &credentials)
+	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "ebanx.json", &credentials)
 
 	if err != nil {
 		log.Println("Erro ao ler credenciais.")
@@ -75,13 +81,14 @@ func main() {
 		return
 	}
 
+	logger.Println("Credentials loaded: " + credentials.CyberSourceCredential.MID)
+
+	logger.Printf("Server is starting...")
+
 	listenAddr := ":5000"
 	if len(os.Args) == 2 {
 		listenAddr = os.Args[1]
 	}
-
-	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
-	logger.Printf("Server is starting...")
 
 	c := &controller{logger: logger, nextRequestID: func() string { return strconv.FormatInt(time.Now().UnixNano(), 36) }}
 	router := http.NewServeMux()
@@ -95,6 +102,11 @@ func main() {
 
 	// Microform services
 	router.HandleFunc("/getMicroformContext", getMicroformContext)
+
+	// 3DS
+	router.HandleFunc("/setupPayerAuth", setupPayerAuth)
+	router.HandleFunc("/doEnrollment", doEnrollment)
+	router.HandleFunc("/validate", validate)
 
 	directory := flag.String("d", "./", "the directory of static file to host")
 	router.Handle("/", http.StripPrefix(strings.TrimRight("/", "/"), http.FileServer(http.Dir(*directory))))
@@ -230,9 +242,185 @@ func getMicroformContext(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Println(msg)
+	log.Println(msg)
 
 	w.Write([]byte(*generatedKey.KeyID))
+}
+
+// setupPayerAuth - Execute the setup payer auth call to Cubersource API
+func setupPayerAuth(w http.ResponseWriter, req *http.Request) {
+	log.Println("setupPayerAuth")
+
+	defer req.Body.Close()
+
+	var setupPayerAuthRequestData threeds.SetupPayerAuthRequestData
+
+	err := json.NewDecoder(req.Body).Decode(&setupPayerAuthRequestData)
+	if err != nil {
+		log.Printf("setupPayerAuth - Erro converting Post Body to JSON - %s", err)
+		return
+	}
+
+	log.Println("setupPayerAuth - Executing Setup Payer Auth call.")
+
+	setupPayerResp, msg, err := threeds.SetupPayerAuthRequest(&credentials.CyberSourceCredential, &setupPayerAuthRequestData)
+
+	if err != nil {
+		log.Println("setupPayerAuth - Error on SetupPayerAuthRequest.")
+		log.Println(err)
+
+		errorString := "setupPayerAuth - Error: " + err.Error() + " Msg string: " + msg
+		http.Error(w, errorString, http.StatusBadRequest)
+		return
+	}
+
+	log.Println("setupPayerAuth - Converting setup payer auth response to string.")
+
+	setupPayerAuthResponseJSON, err := json.Marshal(setupPayerResp)
+
+	if err != nil {
+		errorString := "setupPayerAuth - Erro converting struct to JSON - " + err.Error()
+		log.Printf("setupPayerAuth - Erro converting struct to JSON - %s", err)
+		http.Error(w, errorString, http.StatusBadRequest)
+		return
+	}
+
+	log.Println("setupPayerAuth response:")
+	log.Println(string(setupPayerAuthResponseJSON))
+
+	w.Write(setupPayerAuthResponseJSON)
+}
+
+// doEnrollment - Initiate enrollment process
+func doEnrollment(w http.ResponseWriter, req *http.Request) {
+	log.Println("doEnrollment")
+
+	defer req.Body.Close()
+
+	var enrollmentData threeds.EnrollmentRequestData
+
+	err := json.NewDecoder(req.Body).Decode(&enrollmentData)
+	if err != nil {
+		log.Printf("doEnrollment - Erro converting Post Body to JSON - %s", err)
+		return
+	}
+
+	// Add missing data
+	var messageCategory = "01"
+	var productCode = "01"
+	var transactionMode = threeds.TransactionModeECOMMERCE
+	var acsWindowSize = "02"
+
+	var requestorID = "CARDCYBS_5b16ebc085282c2b20313e7b"
+	var requestorName = "Braspag"
+
+	var merchantName = "Brazil Test"
+	var merchantURL = "https://merchantrul.com"
+	var mcc = "5399"
+
+	var returnUrl = "http://localhost:5000/validate"
+
+	var ipAddress = req.RemoteAddr
+	var httpAcceptBrowserValueStr = "*/*"
+
+	enrollmentData.ConsumerAuthenticationInformation.MCC = &mcc
+	enrollmentData.ConsumerAuthenticationInformation.RequestorID = &requestorID
+	enrollmentData.ConsumerAuthenticationInformation.RequestorName = &requestorName
+	enrollmentData.ConsumerAuthenticationInformation.MessageCategory = &messageCategory
+	enrollmentData.ConsumerAuthenticationInformation.ProductCode = &productCode
+	enrollmentData.ConsumerAuthenticationInformation.TransactionMode = &transactionMode
+	enrollmentData.ConsumerAuthenticationInformation.AcsWindowSize = &acsWindowSize
+
+	enrollmentData.ConsumerAuthenticationInformation.ReturnUrl = &returnUrl
+
+	MerchantInformationData := new(threeds.MerchantInformation)
+	MerchantDescriptorData := new(threeds.MerchantDescriptor)
+
+	MerchantInformationData.MerchantName = &merchantName
+	MerchantDescriptorData.Name = &merchantName
+	MerchantDescriptorData.URL = &merchantURL
+
+	MerchantInformationData.MerchantDescriptor = MerchantDescriptorData
+	enrollmentData.MerchantInformation = MerchantInformationData
+
+	enrollmentData.DeviceInformation.IPAddress = &ipAddress
+	enrollmentData.DeviceInformation.HTTPAcceptBrowserValue = &httpAcceptBrowserValueStr
+
+	enrollmentResponse, returnString, err := threeds.EnrollmentRequest(&credentials.CyberSourceCredential, &enrollmentData)
+
+	if err != nil || enrollmentResponse == nil {
+		log.Println("doEnrollment - Error during enrollment request: " + returnString)
+		http.Error(w, returnString, http.StatusBadRequest)
+		return
+	}
+
+	enrollmentResponseJSON, err := json.Marshal(enrollmentResponse)
+
+	if err != nil {
+		errorString := "doEnrollment - Erro converting struct to JSON - " + err.Error()
+		log.Printf("doEnrollment - Erro converting struct to JSON - %s", err)
+		http.Error(w, errorString, http.StatusBadRequest)
+		return
+	}
+
+	log.Println("Enrollment response:")
+	log.Println(string(enrollmentResponseJSON))
+
+	w.Write(enrollmentResponseJSON)
+}
+
+func validate(w http.ResponseWriter, req *http.Request) {
+	log.Println("validate")
+
+	defer req.Body.Close()
+
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Printf("validate - Erro reading request body.")
+		log.Fatalln(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var bodyMap map[string]string
+	var bodySplit []string = strings.Split(string(body), "&")
+
+	bodyMap = make(map[string]string)
+	for _, pair := range bodySplit {
+		z := strings.Split(pair, "=")
+		bodyMap[z[0]] = z[1]
+	}
+
+	log.Println("TransactionId: " + bodyMap["TransactionId"])
+
+	authenticationTransactionID := bodyMap["TransactionId"]
+
+	validationRequestData := threeds.ValidationRequestData{
+		ConsumerAuthenticationInformation: &commons.ConsumerAuthenticationInformation{
+			AuthenticationTransactionID: &authenticationTransactionID,
+		},
+	}
+
+	validationResponse, returnString, err := threeds.ValidationtRequest(&credentials.CyberSourceCredential, &validationRequestData)
+
+	if err != nil || validationResponse == nil {
+		log.Println("validate - Error during validation request: " + returnString)
+		log.Println(err)
+		http.Error(w, returnString, http.StatusBadRequest)
+		return
+	}
+
+	validationResponseJSON, err := json.Marshal(validationResponse)
+
+	if err != nil {
+		errorString := "validate - Erro converting struct to JSON - " + err.Error()
+		log.Printf("validate - Erro converting struct to JSON.")
+		log.Println(err)
+		http.Error(w, errorString, http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(validationResponseJSON)
 }
 
 // main_test.go

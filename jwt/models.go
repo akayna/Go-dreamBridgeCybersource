@@ -1,13 +1,14 @@
 package jwt
 
 import (
+	"Go-dreamBridgeCybersource/rest/commons"
+
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
 )
 
 // Claims - Struct with the JWT Claims information
 type Claims struct {
-	CardinalCredentials *cybersourcecommons.CardinalCredential
+	CardinalCredentials *commons.CardinalCredential
 	ReferenceID         string
 	Payload             interface{}
 }

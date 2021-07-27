@@ -1,5 +1,10 @@
 package commons
 
+type ErrorInformation struct {
+	Reason  *string `json:"reason,omitempty"`
+	Message *string `json:"message,omitempty"`
+}
+
 // Credentials - Cybersource + cardinal credentials
 type Credentials struct {
 	CyberSourceCredential CyberSourceCredential `json:"cyberSourceCredential"`
@@ -93,6 +98,10 @@ type ConsumerAuthenticationInformation struct {
 	DeviceChannel               *string `json:"deviceChannel,omitempty"`
 	RequestorID                 *string `json:"requestorId,omitempty"`
 	RequestorName               *string `json:"requestorName,omitempty"`
+	ReturnUrl                   *string `json:"returnUrl,omitempty"`
+	DeviceDataCollectionUrl     *string `json:"deviceDataCollectionUrl,omitempty"`
+	AccessToken                 *string `json:"accessToken,omitempty"`
+	StepUpUrl                   *string `json:"stepUpUrl,omitempty"`
 }
 
 // DeviceInformation - Puchase device information
@@ -370,6 +379,11 @@ type TokenizedCard struct {
 	AssuranceLevel  *string `json:"assuranceLevel,omitempty"`
 	StorageMethod   *string `json:"storageMethod,omitempty"`
 	SecurityCode    *string `json:"securityCode,omitempty"`
+}
+
+// TokenInformation - Token information
+type TokenInformation struct {
+	TransientToken *string `json:"transientToken,omitempty"`
 }
 
 // FluidData - Information fo the payment solution
