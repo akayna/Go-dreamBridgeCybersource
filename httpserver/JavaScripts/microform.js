@@ -59,7 +59,7 @@ function setupMicroform() {
             //console.log("Response: ");
             //console.log(response);
       
-            disableCardInputs();
+            disableInputs();
       
             window.alert("CardToken gerado com sucesso.");
           }
@@ -90,7 +90,7 @@ function getMicroformContext() {
 
       document.getElementById("microformContext").setAttribute('value',response);
 
-      enableCardInputs();
+      enableInputs();
 
       return false;
     }).fail(failResponse);
@@ -99,7 +99,7 @@ function getMicroformContext() {
 }
 
 // Enable all card inputs and buttons fields
-function enableCardInputs() {
+function enableInputs() {
     document.getElementById("expMonth").disabled = false;
     document.getElementById("expYear").disabled = false;
     document.getElementById("type").disabled = false;
@@ -107,7 +107,7 @@ function enableCardInputs() {
   }
   
   // Disable all card inputs and buttons fields
-  function disableCardInputs() {
+  function disableInputs() {
     document.getElementById("expMonth").disabled = true;
     document.getElementById("expYear").disabled = true;
     document.getElementById("type").disabled = true;

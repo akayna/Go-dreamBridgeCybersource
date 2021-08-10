@@ -1,6 +1,44 @@
-// Asks the backend for one KeyID with cryptography to generate one cardToken
-function setupPayerAuth() {
-    console.log("setupPayerAuth");
+function setupPayerAuthTkn(){
+    console.log("setupPayerAuthTkn");
+
+    if (getCardTokenKeyCrypto()) {
+        enableAuthFields();
+
+    } else {
+        console.log("falha ao gerar token key.");
+    }
+
+}
+
+function setupPayerAuthToken() {
+    console.log("setupPayerAuthToken");
+
+    generateCardTokenCryptoCallBack(callBackGenerateCardTokenSuccess);
+}
+
+function callBackGenerateCardTokenSuccess() {
+    console.log("callBackGenerateCardTokenSuccess");
+    var setupPayerAuthData = {
+        clientReferenceInformation: {
+            code: document.getElementById("referenceCode").value
+        },
+        paymentInformation: {
+            card: {
+                expirationMonth: document.getElementById("expMonth").value,
+                expirationYear: document.getElementById("expYear").value,
+                type: document.getElementById("type").value
+            },
+            instrumentIdentifier: {
+                id: document.getElementById("cardToken").value
+            }
+        }
+    };
+
+    setupPayerAuth(setupPayerAuthData);    
+}
+
+function setupPayerAuthPAN() {
+    console.log("setupPayerAuthPAN");
 
     var setupPayerAuthData = {
         clientReferenceInformation: {
@@ -15,6 +53,15 @@ function setupPayerAuth() {
             }
         }
     };
+
+    setupPayerAuth(setupPayerAuthData);
+    
+}
+
+function setupPayerAuth(setupPayerAuthData) {
+    console.log("setupPayerAuth");
+
+    disableAuthFields();
 
     var payload = JSON.stringify(setupPayerAuthData);
     console.log("Payload: " + payload);
@@ -36,17 +83,21 @@ function setupPayerAuth() {
 
         console.log("Status: "+ status);
 
-        console.log("Response: ");
-        console.log(response);
-
-        var responseObj = JSON.parse(response);
-
-        document.getElementById('ddc-form').setAttribute('action',responseObj.consumerAuthenticationInformation.deviceDataCollectionUrl);
-        document.getElementById('JWT_ddc').setAttribute('value',responseObj.consumerAuthenticationInformation.accessToken);
-        document.getElementById('referenceID').setAttribute('value',responseObj.consumerAuthenticationInformation.referenceId);
-
-        createDeviceDataCollectionListener();
-        addChallengeFormSend();
+        if (response !== null) {
+            console.log("Response: ");
+            console.log(response);
+    
+            var responseObj = JSON.parse(response);
+    
+            document.getElementById('ddc-form').setAttribute('action',responseObj.consumerAuthenticationInformation.deviceDataCollectionUrl);
+            document.getElementById('JWT_ddc').setAttribute('value',responseObj.consumerAuthenticationInformation.accessToken);
+            document.getElementById('referenceID').setAttribute('value',responseObj.consumerAuthenticationInformation.referenceId);
+    
+            createDeviceDataCollectionListener();
+            challengeFormSend();
+        } else {
+            console.log("Response is null.");
+        }
 
         return true;
     }).fail(failResponse);
@@ -55,6 +106,11 @@ function setupPayerAuth() {
 }
 
 function enableAuthFields() {
+    document.getElementById("cardNumber").disabled = false;
+    document.getElementById("expMonth").disabled = false;
+    document.getElementById("expYear").disabled = false;
+    document.getElementById("type").disabled = false;
+    document.getElementById("overridePaymentMethod").disabled = false;
     document.getElementById("authBtn").disabled = false;
     document.getElementById("referenceCode").disabled = false;
     document.getElementById("firstName").disabled = false;
@@ -72,6 +128,11 @@ function enableAuthFields() {
 }
 
 function disableAuthFields() {
+    document.getElementById("cardNumber").disabled = true;
+    document.getElementById("expMonth").disabled = true;
+    document.getElementById("expYear").disabled = true;
+    document.getElementById("type").disabled = true;
+    document.getElementById("overridePaymentMethod").disabled = true;
     document.getElementById("authBtn").disabled = true;
     document.getElementById("referenceCode").disabled = true;
     document.getElementById("firstName").disabled = true;
@@ -92,8 +153,8 @@ function setRandomReferenceCode() {
     document.getElementById("referenceCode").value = "ref_" + Date.now();
 }
 
-function addChallengeFormSend() {
-    console.log('addChallengeFormSend:');
+function challengeFormSend() {
+    console.log('challengeFormSend:');
 
     var ddcForm = document.querySelector('#ddc-form');
     if (ddcForm) {
@@ -106,7 +167,11 @@ function createDeviceDataCollectionListener() {
 
     window.addEventListener("message", (event) => {
 
+        console.log('window event listener: ');
+        console.log(event);
+
         if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
+        //if (event.origin === "https://centinelapi.cardinalcommerce.com") {
 
             let data = JSON.parse(event.data);
             console.log('Merchant received a message:', data);
@@ -127,11 +192,19 @@ function createDeviceDataCollectionListener() {
     }, false);
 }
 
+function createChallengeValidatedEventLiestener() {
+    console.log('createChallengeValidatedEvent:');
+
+    var challengeIframe = document.getElementById("step-up-iframe");
+
+    challengeIframe.addEventListener("click", (event) => {
+        console.log('Event:');
+        console.log(event);
+    }, false);
+}
+
 function doEnrollment() {
     console.log("doEnrollment.");
-
-    disableCardInputs();
-    disableAuthFields();
   
     var authenticationData = JSON.stringify(getAuthenticationData());
   
@@ -161,11 +234,7 @@ function doEnrollment() {
 
         treatEnrollmentResponse(response);
     
-    }).fail(function (failResponse) {
-        console.log("Problem during enrollment request.");
-        console.log(failResponse);
-        window.alert("Problem during enrollment request.");   
-    });
+    }).fail(failResponse);
 }
 
 function testeStepupcallback() {
@@ -284,7 +353,7 @@ function executeChallenge() {
     if (stepUpForm) {
         blockStepUpButton();
         console.log("opening challenge...");
-        createDeviceDataCollectionListener();
+        //createChallengeValidatedEventLiestener();
         stepUpForm.submit();
     }
 }

@@ -241,21 +241,11 @@
 
   <script>
     window.onload = function(){
-      document.getElementById('authBtn').onclick = setupPayerAuth;
+      document.getElementById('authBtn').onclick = setupPayerAuthPAN;
       document.getElementById('stepUpBtn').onclick = executeChallenge;
-
-      var stepUpForm = document.getElementById("step-up-form")
-      stepUpForm.addEventListener("submit",testeStepupcallback,true);
-
-      /*if(stepUpForm.addEventListener) {
-        stepUpForm.addEventListener("submit",testeStepupcallback,false);
-      } else {
-        stepUpForm.attachEvent('onsubmit', formvalidate);
-      }*/
 
       setRandomReferenceCode();
 
-      enableCardInputs();
       enableAuthFields();
     };
   </script>

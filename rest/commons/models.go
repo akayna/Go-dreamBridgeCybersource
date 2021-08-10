@@ -424,19 +424,25 @@ type PaymentType struct {
 
 // PaymentInformation - Payment information
 type PaymentInformation struct {
-	Card            *Card            `json:"card,omitempty"`
-	Invoice         *Invoice         `json:"invoice,omitempty"`
-	AccountFeatures *AccountFeatures `json:"accountFeatures,omitempty"`
-	TokenizedCard   *TokenizedCard   `json:"tokenizedCard,omitempty"`
-	FluidData       *FluidData       `json:"fluidData,omitempty"`
-	Customer        *Customer        `json:"customer,omitempty"`
-	Bank            *Bank            `json:"bank,omitempty"`
-	PaymentType     *PaymentType     `json:"paymentType,omitempty"`
-	Scheme          *string          `json:"scheme,omitempty"`
-	Bin             *string          `json:"bin,omitempty"`
-	AccountType     *string          `json:"accountType,omitempty"`
-	Issuer          *string          `json:"issuer,omitempty"`
-	BinCountry      *string          `json:"binCountry,omitempty"`
+	Card                 *Card                 `json:"card,omitempty"`
+	Invoice              *Invoice              `json:"invoice,omitempty"`
+	AccountFeatures      *AccountFeatures      `json:"accountFeatures,omitempty"`
+	TokenizedCard        *TokenizedCard        `json:"tokenizedCard,omitempty"`
+	FluidData            *FluidData            `json:"fluidData,omitempty"`
+	Customer             *Customer             `json:"customer,omitempty"`
+	Bank                 *Bank                 `json:"bank,omitempty"`
+	PaymentType          *PaymentType          `json:"paymentType,omitempty"`
+	Scheme               *string               `json:"scheme,omitempty"`
+	Bin                  *string               `json:"bin,omitempty"`
+	AccountType          *string               `json:"accountType,omitempty"`
+	Issuer               *string               `json:"issuer,omitempty"`
+	BinCountry           *string               `json:"binCountry,omitempty"`
+	InstrumentIdentifier *InstrumentIdentifier `json:"instrumentIdentifier,omitempty"`
+}
+
+// InstrumentIdentifier - Instrument identifier information
+type InstrumentIdentifier struct {
+	ID *string `json:"id,omitempty"`
 }
 
 // MerchantInitiatedTransaction - Information about the previous transaction.

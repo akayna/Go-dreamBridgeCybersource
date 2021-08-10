@@ -71,8 +71,13 @@ func main() {
 	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
 	logger.Printf("Loading credentials...")
 
+	// Credenciais teste
 	err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "rafaelcunha.json", &credentials)
 	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "ebanx.json", &credentials)
+	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "vileve.json", &credentials)
+
+	// Credenciais live
+	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "cybsbrdemo.json", &credentials)
 
 	if err != nil {
 		log.Println("Erro ao ler credenciais.")
@@ -175,6 +180,8 @@ func (c *controller) tracing(hdlr http.Handler) http.Handler {
 
 // getFlexAPIKey - Generate ont key for the FlexAPI and send it to the browser
 func getFlexAPIKey(w http.ResponseWriter, req *http.Request) {
+	log.Println("getFlexAPIKey")
+
 	generatedKey, msg, err := flexAPI.GenerateKey(&credentials.CyberSourceCredential, nil)
 
 	if err != nil {
@@ -183,9 +190,9 @@ func getFlexAPIKey(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Println(msg)
-	fmt.Printf("Key: %+v\n", generatedKey)
-	fmt.Printf("KeyID: %+v\n", *generatedKey.KeyID)
+	log.Println(msg)
+	log.Printf("Key: %+v\n", generatedKey)
+	log.Printf("KeyID: %+v\n", *generatedKey.KeyID)
 
 	w.Write([]byte(*generatedKey.KeyID))
 }
