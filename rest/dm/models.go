@@ -1,25 +1,33 @@
 package dm
 
 import (
+	"Go-dreamBridgeCybersource/rest/commons"
 	"time"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
 )
 
-// ClientReferenceInformation - ClientReferenceInformation infos struct
-type ClientReferenceInformation struct {
-	Code string `json:"code"`
+// DMResponse - DM case responses
+type DMResponse struct {
+	ClientReferenceInformation *commons.ClientReferenceInformation `json:"clientReferenceInformation,omitempty"`
+	ID                         *string                             `json:"id,omitempty"`
+	RiskInformation            *RiskInformation                    `json:"riskInformation,omitempty"`
+	Status                     *string                             `json:"status,omitempty"`
+	SubmitTimeUtc              *time.Time                          `json:"submitTimeUtc,omitempty"`
+	ErrorInformation           *commons.ErrorInformation           `json:"errorInformation,omitempty"`
+	PaymentInformation         *commons.PaymentInformation         `json:"paymentInformation,omitempty"`
 }
 
-// CreateCaseResponse - Create DM case response
-type CreateCaseResponse struct {
-	ClientReferenceInformation *cybersourcecommons.ClientReferenceInformation `json:"clientReferenceInformation,omitempty"`
-	ID                         *string                                        `json:"id,omitempty"`
-	RiskInformation            *RiskInformation                               `json:"riskInformation,omitempty"`
-	Status                     *string                                        `json:"status,omitempty"`
-	SubmitTimeUtc              *time.Time                                     `json:"submitTimeUtc,omitempty"`
-	ErrorInformation           *ErrorInformation                              `json:"errorInformation,omitempty"`
-	PaymentInformation         *cybersourcecommons.PaymentInformation         `json:"paymentInformation,omitempty"`
+// DMRequest -Decision Manager request data struct
+type DMRequest struct {
+	ClientReferenceInformation *commons.ClientReferenceInformation `json:"clientReferenceInformation,omitempty"`
+	ProcessorInformation       *commons.ProcessorInformation       `json:"processorInformation,omitempty"`
+	PaymentInformation         *commons.PaymentInformation         `json:"paymentInformation,omitempty"`
+	OrderInformation           *commons.OrderInformation           `json:"orderInformation,omitempty"`
+	BuyerInformation           *commons.BuyerInformation           `json:"buyerInformation,omitempty"`
+	DeviceInformation          *commons.DeviceInformation          `json:"deviceInformation,omitempty"`
+	CardVerification           *commons.CardVerification           `json:"cardVerification,omitempty"`
+	RiskInformation            *RiskInformation                    `json:"riskInformation,omitempty"`
+	TravelInformation          *TravelInformation                  `json:"travelInformation,omitempty"`
+	MerchantDefinedInformation []MerchantDefinedInformation        `json:"merchantDefinedInformation,omitempty"`
 }
 
 // Score - Score information
@@ -27,26 +35,6 @@ type Score struct {
 	Result      *string  `json:"result,omitempty"`
 	FactorCodes []string `json:"factorCodes,omitempty"`
 	ModelUsed   *string  `json:"modelUsed,omitempty"`
-}
-
-// ErrorInformation - Error information
-type ErrorInformation struct {
-	Reason  *string `json:"reason,omitempty"`
-	Message *string `json:"message,omitempty"`
-}
-
-// CreateCaseRequest - Create Decision Manager Case request data struct
-type CreateCaseRequest struct {
-	ClientReferenceInformation *cybersourcecommons.ClientReferenceInformation `json:"clientReferenceInformation,omitempty"`
-	ProcessorInformation       *cybersourcecommons.ProcessorInformation       `json:"processorInformation,omitempty"`
-	PaymentInformation         *cybersourcecommons.PaymentInformation         `json:"paymentInformation,omitempty"`
-	OrderInformation           *cybersourcecommons.OrderInformation           `json:"orderInformation,omitempty"`
-	BuyerInformation           *cybersourcecommons.BuyerInformation           `json:"buyerInformation,omitempty"`
-	DeviceInformation          *cybersourcecommons.DeviceInformation          `json:"deviceInformation,omitempty"`
-	CardVerification           *cybersourcecommons.CardVerification           `json:"cardVerification,omitempty"`
-	RiskInformation            *RiskInformation                               `json:"riskInformation,omitempty"`
-	TravelInformation          *TravelInformation                             `json:"travelInformation,omitempty"`
-	MerchantDefinedInformation []MerchantDefinedInformation                   `json:"merchantDefinedInformation,omitempty"`
 }
 
 // InfoCodes - Info codes
@@ -77,15 +65,16 @@ type Providers struct {
 // RiskInformation - Risk information for or from the Decision Manager
 type RiskInformation struct {
 	//Score              *string                                `json:"score,omitempty"`
-	LocalTime          *string                                `json:"localTime,omitempty"`
-	InfoCodes          *InfoCodes                             `json:"infoCodes,omitempty"`
-	Profile            *Profile                               `json:"profile,omitempty"`
-	EventType          *string                                `json:"eventType,omitempty"`
-	Rules              []Rules                                `json:"rules,omitempty"`
-	PaymentInformation *cybersourcecommons.PaymentInformation `json:"paymentInformation,omitempty"`
-	Providers          *Providers                             `json:"providers,omitempty"`
-	CasePriority       *string                                `json:"casePriority,omitempty"`
-	Score              *Score                                 `json:"score,omitempty"`
+	LocalTime          *string                     `json:"localTime,omitempty"`
+	InfoCodes          *InfoCodes                  `json:"infoCodes,omitempty"`
+	Profile            *Profile                    `json:"profile,omitempty"`
+	EventType          *string                     `json:"eventType,omitempty"`
+	Rules              []Rules                     `json:"rules,omitempty"`
+	PaymentInformation *commons.PaymentInformation `json:"paymentInformation,omitempty"`
+	Providers          *Providers                  `json:"providers,omitempty"`
+	CasePriority       *string                     `json:"casePriority,omitempty"`
+	Score              *Score                      `json:"score,omitempty"`
+	MarkingDetails     *MarkingDetails             `json:"markingDetails,omitempty"`
 }
 
 // Legs - Travel lags information
@@ -108,4 +97,12 @@ type TravelInformation struct {
 type MerchantDefinedInformation struct {
 	Key   *string `json:"key,omitempty"`
 	Value *string `json:"value,omitempty"`
+}
+
+// MarkingDetails - Field for list management actions
+type MarkingDetails struct {
+	Notes      *string `json:"notes,omitempty"`
+	Reason     *string `json:"reason,omitempty"`
+	RecordName *string `json:"recordName,omitempty"`
+	Action     *string `json:"action,omitempty"`
 }
