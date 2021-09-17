@@ -1,12 +1,10 @@
 package gtw
 
 import (
+	"Go-dreamBridgeCybersource/rest"
+	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"log"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcerest"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
 )
 
 var paymentsEndpoint = "/pts/v2/payments"
@@ -14,40 +12,40 @@ var capturesEndpoint = "/pts/v2/captures"
 var refundsEndpoint = "/pts/v2/refunds"
 
 // VoidRefundByID - Void a Refund by its ID
-func VoidRefundByID(credentials *cybersourcecommons.CyberSourceCredential, refundID string, voidRefundData *Payment) (*Payment, string, error) {
+func VoidRefundByID(credentials *commons.CyberSourceCredential, refundID string, voidRefundData *Payment) (*Payment, string, error) {
 	voidRefundEndpoint := refundsEndpoint + "/" + refundID + "/voids"
 	return voidTransaction(credentials, voidRefundEndpoint, voidRefundData)
 }
 
 // VoidRefund - Void a Refund
-func VoidRefund(credentials *cybersourcecommons.CyberSourceCredential, voidRefundEndpoint string, voidRefundData *Payment) (*Payment, string, error) {
+func VoidRefund(credentials *commons.CyberSourceCredential, voidRefundEndpoint string, voidRefundData *Payment) (*Payment, string, error) {
 	return voidTransaction(credentials, voidRefundEndpoint, voidRefundData)
 }
 
 // VoidCaptureByID - Void a Capture by its ID
-func VoidCaptureByID(credentials *cybersourcecommons.CyberSourceCredential, captureID string, voidCaptureData *Payment) (*Payment, string, error) {
+func VoidCaptureByID(credentials *commons.CyberSourceCredential, captureID string, voidCaptureData *Payment) (*Payment, string, error) {
 	voidCaptureEndpoint := capturesEndpoint + "/" + captureID + "/voids"
 	return voidTransaction(credentials, voidCaptureEndpoint, voidCaptureData)
 }
 
 // VoidCapture - Void a Capture
-func VoidCapture(credentials *cybersourcecommons.CyberSourceCredential, voidCaptureEndpoint string, voidCaptureData *Payment) (*Payment, string, error) {
+func VoidCapture(credentials *commons.CyberSourceCredential, voidCaptureEndpoint string, voidCaptureData *Payment) (*Payment, string, error) {
 	return voidTransaction(credentials, voidCaptureEndpoint, voidCaptureData)
 }
 
 // VoidPaymentByID - Void a Payment by its ID
-func VoidPaymentByID(credentials *cybersourcecommons.CyberSourceCredential, paymentID string, voidPaymentData *Payment) (*Payment, string, error) {
+func VoidPaymentByID(credentials *commons.CyberSourceCredential, paymentID string, voidPaymentData *Payment) (*Payment, string, error) {
 	voidPaymentEndpoint := paymentsEndpoint + "/" + paymentID + "/voids"
 	return voidTransaction(credentials, voidPaymentEndpoint, voidPaymentData)
 }
 
 // VoidPayment - Void a Payment
-func VoidPayment(credentials *cybersourcecommons.CyberSourceCredential, voidPaymentEndpoint string, voidPaymentData *Payment) (*Payment, string, error) {
+func VoidPayment(credentials *commons.CyberSourceCredential, voidPaymentEndpoint string, voidPaymentData *Payment) (*Payment, string, error) {
 	return voidTransaction(credentials, voidPaymentEndpoint, voidPaymentData)
 }
 
 // RefundCapture - Refund a capture
-func voidTransaction(credentials *cybersourcecommons.CyberSourceCredential, voidEndpoint string, voidData *Payment) (*Payment, string, error) {
+func voidTransaction(credentials *commons.CyberSourceCredential, voidEndpoint string, voidData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(voidData)
 	if err != nil {
@@ -58,7 +56,7 @@ func voidTransaction(credentials *cybersourcecommons.CyberSourceCredential, void
 	//log.Println("Void Json Request: ")
 	//log.Println(string(jsonData))
 
-	voidRawResp, err := cybersourcerest.RestFullPOST(credentials, voidEndpoint, string(jsonData))
+	voidRawResp, err := rest.RestFullPOST(credentials, voidEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - voidTransaction - Error executing POST request.")
@@ -72,7 +70,7 @@ func voidTransaction(credentials *cybersourcecommons.CyberSourceCredential, void
 }
 
 // treatsRefundCaptureResponse - Verify and treat the HTTP POST Response of a refund capture request
-func treatsVoidResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsVoidResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -90,13 +88,13 @@ func treatsVoidResponse(response *cybersourcerest.RequestResponse) (*Payment, st
 }
 
 // RefundCaptureByID - Refund a capture by its id
-func RefundCaptureByID(credentials *cybersourcecommons.CyberSourceCredential, captureID string, refundData *Payment) (*Payment, string, error) {
+func RefundCaptureByID(credentials *commons.CyberSourceCredential, captureID string, refundData *Payment) (*Payment, string, error) {
 	refundEndpoint := capturesEndpoint + "/" + captureID + "/refunds"
 	return RefundCapture(credentials, refundEndpoint, refundData)
 }
 
 // RefundCapture - Refund a capture
-func RefundCapture(credentials *cybersourcecommons.CyberSourceCredential, refundEndpoint string, refundData *Payment) (*Payment, string, error) {
+func RefundCapture(credentials *commons.CyberSourceCredential, refundEndpoint string, refundData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(refundData)
 	if err != nil {
@@ -107,7 +105,7 @@ func RefundCapture(credentials *cybersourcecommons.CyberSourceCredential, refund
 	log.Println("Refund Capture Json Request: ")
 	log.Println(string(jsonData))
 
-	refundCaptureRawResp, err := cybersourcerest.RestFullPOST(credentials, refundEndpoint, string(jsonData))
+	refundCaptureRawResp, err := rest.RestFullPOST(credentials, refundEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - RefundCapture - Error executing POST request.")
@@ -121,7 +119,7 @@ func RefundCapture(credentials *cybersourcecommons.CyberSourceCredential, refund
 }
 
 // treatsRefundCaptureResponse - Verify and treat the HTTP POST Response of a refund capture request
-func treatsRefundCaptureResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsRefundCaptureResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -139,13 +137,13 @@ func treatsRefundCaptureResponse(response *cybersourcerest.RequestResponse) (*Pa
 }
 
 // RefundPaymentByID - Refund a payment by its id
-func RefundPaymentByID(credentials *cybersourcecommons.CyberSourceCredential, paymentID string, refundData *Payment) (*Payment, string, error) {
+func RefundPaymentByID(credentials *commons.CyberSourceCredential, paymentID string, refundData *Payment) (*Payment, string, error) {
 	refundEndpoint := paymentsEndpoint + "/" + paymentID + "/refunds"
 	return RefundPayment(credentials, refundEndpoint, refundData)
 }
 
 // RefundPayment - Refund a payment
-func RefundPayment(credentials *cybersourcecommons.CyberSourceCredential, refundEndpoint string, refundData *Payment) (*Payment, string, error) {
+func RefundPayment(credentials *commons.CyberSourceCredential, refundEndpoint string, refundData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(refundData)
 	if err != nil {
@@ -156,7 +154,7 @@ func RefundPayment(credentials *cybersourcecommons.CyberSourceCredential, refund
 	log.Println("Refund Payment Json Request: ")
 	log.Println(string(jsonData))
 
-	refundPaymentRawResp, err := cybersourcerest.RestFullPOST(credentials, refundEndpoint, string(jsonData))
+	refundPaymentRawResp, err := rest.RestFullPOST(credentials, refundEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - RefundPayment - Error executing POST request.")
@@ -170,7 +168,7 @@ func RefundPayment(credentials *cybersourcecommons.CyberSourceCredential, refund
 }
 
 // treatsRefundPaymentResponse - Verify and treat the HTTP POST Response of a refund payment request
-func treatsRefundPaymentResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsRefundPaymentResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -188,13 +186,13 @@ func treatsRefundPaymentResponse(response *cybersourcerest.RequestResponse) (*Pa
 }
 
 // CapturePaymentByID - Capture payment by its id
-func CapturePaymentByID(credentials *cybersourcecommons.CyberSourceCredential, paymentID string, captureData *Payment) (*Payment, string, error) {
+func CapturePaymentByID(credentials *commons.CyberSourceCredential, paymentID string, captureData *Payment) (*Payment, string, error) {
 	captureEndpoint := paymentsEndpoint + "/" + paymentID + "/captures"
 	return CapturePayment(credentials, captureEndpoint, captureData)
 }
 
 // CapturePayment - Capture a payment
-func CapturePayment(credentials *cybersourcecommons.CyberSourceCredential, captureEndpoint string, captureData *Payment) (*Payment, string, error) {
+func CapturePayment(credentials *commons.CyberSourceCredential, captureEndpoint string, captureData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(captureData)
 	if err != nil {
@@ -205,7 +203,7 @@ func CapturePayment(credentials *cybersourcecommons.CyberSourceCredential, captu
 	log.Println("Capture Payment Json Request: ")
 	log.Println(string(jsonData))
 
-	capturePaymentRawResp, err := cybersourcerest.RestFullPOST(credentials, captureEndpoint, string(jsonData))
+	capturePaymentRawResp, err := rest.RestFullPOST(credentials, captureEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - CapturePayment - Error executing POST request.")
@@ -219,7 +217,7 @@ func CapturePayment(credentials *cybersourcecommons.CyberSourceCredential, captu
 }
 
 // treatsCapturePaymentResponse - Verify and treat the HTTP POST Response of a payment capture
-func treatsCapturePaymentResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsCapturePaymentResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -237,14 +235,14 @@ func treatsCapturePaymentResponse(response *cybersourcerest.RequestResponse) (*P
 }
 
 // ProcessAuthorizationReversalByID - Process one authorization reversal using its ID
-func ProcessAuthorizationReversalByID(credentials *cybersourcecommons.CyberSourceCredential, paymentID string, reversalData *Payment) (*Payment, string, error) {
+func ProcessAuthorizationReversalByID(credentials *commons.CyberSourceCredential, paymentID string, reversalData *Payment) (*Payment, string, error) {
 	reversalEndpoint := paymentsEndpoint + "/" + paymentID + "/reversals"
 
 	return ProcessAuthorizationReversal(credentials, reversalEndpoint, reversalData)
 }
 
 // ProcessAuthorizationReversal - Process one authorization reversal
-func ProcessAuthorizationReversal(credentials *cybersourcecommons.CyberSourceCredential, reversalEndpoint string, reversalData *Payment) (*Payment, string, error) {
+func ProcessAuthorizationReversal(credentials *commons.CyberSourceCredential, reversalEndpoint string, reversalData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(reversalData)
 	if err != nil {
@@ -255,7 +253,7 @@ func ProcessAuthorizationReversal(credentials *cybersourcecommons.CyberSourceCre
 	log.Println("Json Request: ")
 	log.Println(string(jsonData))
 
-	authorizationReversalRawResp, err := cybersourcerest.RestFullPOST(credentials, reversalEndpoint, string(jsonData))
+	authorizationReversalRawResp, err := rest.RestFullPOST(credentials, reversalEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - ProcessAuthorizationReversal - Error executing POST request.")
@@ -269,7 +267,7 @@ func ProcessAuthorizationReversal(credentials *cybersourcecommons.CyberSourceCre
 }
 
 // treatsProcessAuthorizationReversal - Verify and treat the HTTP POST Response of an authorization reversal
-func treatsProcessAuthorizationReversalResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsProcessAuthorizationReversalResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -287,14 +285,14 @@ func treatsProcessAuthorizationReversalResponse(response *cybersourcerest.Reques
 }
 
 // GetPaymentInfoByID - Retrieves payment info by payment id
-func GetPaymentInfoByID(credentials *cybersourcecommons.CyberSourceCredential, paymentID string) (*Payment, string, error) {
+func GetPaymentInfoByID(credentials *commons.CyberSourceCredential, paymentID string) (*Payment, string, error) {
 	return GetPaymentInfo(credentials, paymentsEndpoint+"/"+paymentID)
 }
 
 // GetPaymentInfo - Retrieves payment information
-func GetPaymentInfo(credentials *cybersourcecommons.CyberSourceCredential, endpointURL string) (*Payment, string, error) {
+func GetPaymentInfo(credentials *commons.CyberSourceCredential, endpointURL string) (*Payment, string, error) {
 
-	paymentInfoRawResp, err := cybersourcerest.RestFullGET(credentials, endpointURL)
+	paymentInfoRawResp, err := rest.RestFullGET(credentials, endpointURL)
 
 	if err != nil {
 		log.Println("cybersourcegateway - GetPaymentInfo - Error executing GET request.")
@@ -308,7 +306,7 @@ func GetPaymentInfo(credentials *cybersourcecommons.CyberSourceCredential, endpo
 }
 
 // treatsGetPaymentInfoResponse - Verify and treat the HTTP GET Response of a get payment info
-func treatsGetPaymentInfoResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatsGetPaymentInfoResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -326,7 +324,7 @@ func treatsGetPaymentInfoResponse(response *cybersourcerest.RequestResponse) (*P
 }
 
 // ProcessPayment - Post one payment request
-func ProcessPayment(credentials *cybersourcecommons.CyberSourceCredential, paymentData *Payment) (*Payment, string, error) {
+func ProcessPayment(credentials *commons.CyberSourceCredential, paymentData *Payment) (*Payment, string, error) {
 
 	jsonData, err := json.Marshal(paymentData)
 	if err != nil {
@@ -337,7 +335,7 @@ func ProcessPayment(credentials *cybersourcecommons.CyberSourceCredential, payme
 	log.Println("Json Request: ")
 	log.Println(string(jsonData))
 
-	paymentRawResp, err := cybersourcerest.RestFullPOST(credentials, paymentsEndpoint, string(jsonData))
+	paymentRawResp, err := rest.RestFullPOST(credentials, paymentsEndpoint, string(jsonData))
 
 	if err != nil {
 		log.Println("cybersourcegateway - ProcessPayment - Error executing POST request.")
@@ -351,7 +349,7 @@ func ProcessPayment(credentials *cybersourcecommons.CyberSourceCredential, payme
 }
 
 // treatePaymentRequestResponse - Verify and treat the HTTP Post Response to authorization request
-func treatePaymentRequestResponse(response *cybersourcerest.RequestResponse) (*Payment, string, error) {
+func treatePaymentRequestResponse(response *rest.RequestResponse) (*Payment, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil

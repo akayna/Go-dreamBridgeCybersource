@@ -1,39 +1,38 @@
 package gtw
 
 import (
+	"Go-dreamBridgeCybersource/rest/commons"
 	"time"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
 )
 
 // PAYMENT AUTHORIZATION //
 
 // Payment - Authorization struct
 type Payment struct {
-	ClientReferenceInformation        *cybersourcecommons.ClientReferenceInformation        `json:"clientReferenceInformation,omitempty"`
-	ID                                *string                                               `json:"id,omitempty"`
-	ProcessingInformation             *cybersourcecommons.ProcessingInformation             `json:"processingInformation,omitempty"`
-	IssuerInformation                 *IssuerInformation                                    `json:"issuerInformation,omitempty"`
-	PaymentInformation                *cybersourcecommons.PaymentInformation                `json:"paymentInformation,omitempty"`
-	ProcessorInformation              *cybersourcecommons.ProcessorInformation              `json:"processorInformation,omitempty"`
-	ReconciliationID                  *string                                               `json:"reconciliationId,omitempty"`
-	ReversalAmountDetails             *cybersourcecommons.AmountDetails                     `json:"reversalAmountDetails,omitempty"`
-	StatusInformation                 *StatusInformation                                    `json:"statusInformation,omitempty"`
-	OrderInformation                  *cybersourcecommons.OrderInformation                  `json:"orderInformation,omitempty"`
-	Status                            *string                                               `json:"status,omitempty"`
-	SubmitTimeUtc                     *time.Time                                            `json:"submitTimeUtc,omitempty"`
-	VoidAmountDetails                 *cybersourcecommons.AmountDetails                     `json:"voidAmountDetails,omitempty"`
-	PaymentAccountInformation         *PaymentAccountInformation                            `json:"paymentAccountInformation,omitempty"`
-	BuyerInformation                  *cybersourcecommons.BuyerInformation                  `json:"buyerInformation,omitempty"`
-	RecipientInformation              *RecipientInformation                                 `json:"recipientInformation,omitempty"`
-	DeviceInformation                 *cybersourcecommons.DeviceInformation                 `json:"deviceInformation,omitempty"`
-	MerchantInformation               *cybersourcecommons.MerchantInformation               `json:"merchantInformation,omitempty"`
-	AggregatorInformation             *AggregatorInformation                                `json:"aggregatorInformation,omitempty"`
-	ConsumerAuthenticationInformation *cybersourcecommons.ConsumerAuthenticationInformation `json:"consumerAuthenticationInformation,omitempty"`
-	PointOfSaleInformation            *cybersourcecommons.PointOfSaleInformation            `json:"pointOfSaleInformation,omitempty"`
-	MerchantDefinedInformation        []MerchantDefinedInformation                          `json:"merchantDefinedInformation,omitempty"`
-	InstallmentInformation            *cybersourcecommons.InstallmentInformation            `json:"installmentInformation,omitempty"`
-	Links                             *cybersourcecommons.Links                             `json:"_links,omitempty"`
+	ClientReferenceInformation        *commons.ClientReferenceInformation        `json:"clientReferenceInformation,omitempty"`
+	ID                                *string                                    `json:"id,omitempty"`
+	ProcessingInformation             *commons.ProcessingInformation             `json:"processingInformation,omitempty"`
+	IssuerInformation                 *IssuerInformation                         `json:"issuerInformation,omitempty"`
+	PaymentInformation                *commons.PaymentInformation                `json:"paymentInformation,omitempty"`
+	ProcessorInformation              *commons.ProcessorInformation              `json:"processorInformation,omitempty"`
+	ReconciliationID                  *string                                    `json:"reconciliationId,omitempty"`
+	ReversalAmountDetails             *commons.AmountDetails                     `json:"reversalAmountDetails,omitempty"`
+	StatusInformation                 *StatusInformation                         `json:"statusInformation,omitempty"`
+	OrderInformation                  *commons.OrderInformation                  `json:"orderInformation,omitempty"`
+	Status                            *string                                    `json:"status,omitempty"`
+	SubmitTimeUtc                     *time.Time                                 `json:"submitTimeUtc,omitempty"`
+	VoidAmountDetails                 *commons.AmountDetails                     `json:"voidAmountDetails,omitempty"`
+	PaymentAccountInformation         *PaymentAccountInformation                 `json:"paymentAccountInformation,omitempty"`
+	BuyerInformation                  *commons.BuyerInformation                  `json:"buyerInformation,omitempty"`
+	RecipientInformation              *RecipientInformation                      `json:"recipientInformation,omitempty"`
+	DeviceInformation                 *commons.DeviceInformation                 `json:"deviceInformation,omitempty"`
+	MerchantInformation               *commons.MerchantInformation               `json:"merchantInformation,omitempty"`
+	AggregatorInformation             *AggregatorInformation                     `json:"aggregatorInformation,omitempty"`
+	ConsumerAuthenticationInformation *commons.ConsumerAuthenticationInformation `json:"consumerAuthenticationInformation,omitempty"`
+	PointOfSaleInformation            *commons.PointOfSaleInformation            `json:"pointOfSaleInformation,omitempty"`
+	MerchantDefinedInformation        []MerchantDefinedInformation               `json:"merchantDefinedInformation,omitempty"`
+	InstallmentInformation            *commons.InstallmentInformation            `json:"installmentInformation,omitempty"`
+	Links                             *commons.Links                             `json:"_links,omitempty"`
 }
 
 // IssuerInformation - Additional data about the issuer
@@ -77,7 +76,7 @@ type MerchantDefinedInformation struct {
 
 // PaymentAccountInformation - Payment account information
 type PaymentAccountInformation struct {
-	Card *cybersourcecommons.Card `json:"card,omitempty"`
+	Card *commons.Card `json:"card,omitempty"`
 }
 
 // StatusInformation - Payment status information

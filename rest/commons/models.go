@@ -235,7 +235,7 @@ type TaxDetails struct {
 
 // AmountDetails - Amount details information
 type AmountDetails struct {
-	TotalAmount             *string                `json:"totalAmount,omitempty"`
+	TotalAmount             *int                   `json:"totalAmount,omitempty"`
 	AuthorizedAmount        *string                `json:"authorizedAmount,omitempty"`
 	ReversedAmount          *string                `json:"reversedAmount,omitempty"`
 	Currency                *string                `json:"currency,omitempty"`
