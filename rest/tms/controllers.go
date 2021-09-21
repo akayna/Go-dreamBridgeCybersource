@@ -1,20 +1,19 @@
 package tms
 
 import (
+	"Go-dreamBridgeCybersource/rest"
+	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"log"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcerest"
 )
 
 var tmsPaymentInstrumentEndpoint = "/tms/v1/paymentinstruments"
 var tmsInstrumentIdentifierEndpoint = "/tms/v1/instrumentidentifiers"
 
 // DeleteInstrumentIdentifier - Deletes the instrument identifier
-func DeleteInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCredential, instrumentIdentifierID string) (bool, string, error) {
+func DeleteInstrumentIdentifier(credentials *commons.CyberSourceCredential, instrumentIdentifierID string) (bool, string, error) {
 
-	response, err := cybersourcerest.RestFullDELETE(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
+	response, err := rest.RestFullDELETE(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
 
 	if err != nil {
 		log.Println("cybersourcetms - DeleteInstrumentIdentifier - Error executing Delete request.")
@@ -25,7 +24,7 @@ func DeleteInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCrede
 }
 
 // treateInstrumentIdentifierDeleteResponse - Verify the HTTP Response and treat the delete response.
-func treateInstrumentIdentifierDeleteResponse(response *cybersourcerest.RequestResponse) (bool, string, error) {
+func treateInstrumentIdentifierDeleteResponse(response *rest.RequestResponse) (bool, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 		return false, response.Body, nil
 	}
@@ -35,8 +34,8 @@ func treateInstrumentIdentifierDeleteResponse(response *cybersourcerest.RequestR
 }
 
 // RetrieveInstrumentIdentifier - Retrieves the instrument identifier
-func RetrieveInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCredential, instrumentIdentifierID string) (*InstrumentIdentifierResponse, string, error) {
-	requestResp, err := cybersourcerest.RestFullGET(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
+func RetrieveInstrumentIdentifier(credentials *commons.CyberSourceCredential, instrumentIdentifierID string) (*InstrumentIdentifierResponse, string, error) {
+	requestResp, err := rest.RestFullGET(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrieveInstrumentIdentifier - Error executing GET request.")
@@ -47,7 +46,7 @@ func RetrieveInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCre
 }
 
 // treateRetrieveInstrumentIdentifierResponse - Verify and treat the HTTP Post Response
-func treateRetrieveInstrumentIdentifierResponse(response *cybersourcerest.RequestResponse) (*InstrumentIdentifierResponse, string, error) {
+func treateRetrieveInstrumentIdentifierResponse(response *rest.RequestResponse) (*InstrumentIdentifierResponse, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -65,7 +64,7 @@ func treateRetrieveInstrumentIdentifierResponse(response *cybersourcerest.Reques
 }
 
 // CreateInstrumentIdentifier - Execute the Create Instrument Identifier Request.
-func CreateInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCredential, instrumentIdentifierRequestData *CreateInstrumentIdentifierRequest) (*InstrumentIdentifierResponse, string, error) {
+func CreateInstrumentIdentifier(credentials *commons.CyberSourceCredential, instrumentIdentifierRequestData *CreateInstrumentIdentifierRequest) (*InstrumentIdentifierResponse, string, error) {
 
 	payload, err := json.Marshal(instrumentIdentifierRequestData)
 	if err != nil {
@@ -73,7 +72,7 @@ func CreateInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCrede
 		return nil, "Error converting struct to json string.", err
 	}
 
-	createResp, err := cybersourcerest.RestFullPOST(credentials, tmsInstrumentIdentifierEndpoint, string(payload))
+	createResp, err := rest.RestFullPOST(credentials, tmsInstrumentIdentifierEndpoint, string(payload))
 
 	if err != nil {
 		log.Println("cybersourcetms - CreateInstrumentIdentifier - Error executing POST request.")
@@ -84,7 +83,7 @@ func CreateInstrumentIdentifier(credentials *cybersourcecommons.CyberSourceCrede
 }
 
 // treateCreateInstrumentIdentifierResponse - Verify and treat the HTTP Post Response
-func treateCreateInstrumentIdentifierResponse(response *cybersourcerest.RequestResponse) (*InstrumentIdentifierResponse, string, error) {
+func treateCreateInstrumentIdentifierResponse(response *rest.RequestResponse) (*InstrumentIdentifierResponse, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -102,7 +101,7 @@ func treateCreateInstrumentIdentifierResponse(response *cybersourcerest.RequestR
 }
 
 // CreatePaymentInstrument - Create a Payment Instrument
-func CreatePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredential, paymentInstrument *CreatePaymentInstrumentRequest) (*PaymentInstrumentResponse, string, error) {
+func CreatePaymentInstrument(credentials *commons.CyberSourceCredential, paymentInstrument *CreatePaymentInstrumentRequest) (*PaymentInstrumentResponse, string, error) {
 
 	payload, err := json.Marshal(paymentInstrument)
 	if err != nil {
@@ -112,7 +111,7 @@ func CreatePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredenti
 
 	//fmt.Println("Payload:\n" + string(payload))
 
-	createResp, err := cybersourcerest.RestFullPOST(credentials, tmsPaymentInstrumentEndpoint, string(payload))
+	createResp, err := rest.RestFullPOST(credentials, tmsPaymentInstrumentEndpoint, string(payload))
 
 	if err != nil {
 		log.Println("cybersourcetms - CeratePaymentInstrument - Error executing POST request.")
@@ -123,7 +122,7 @@ func CreatePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredenti
 }
 
 // treateCreatePaymentInstrumentResponse - Verify and treat the HTTP Post Response
-func treateCreatePaymentInstrumentResponse(response *cybersourcerest.RequestResponse) (*PaymentInstrumentResponse, string, error) {
+func treateCreatePaymentInstrumentResponse(response *rest.RequestResponse) (*PaymentInstrumentResponse, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -142,9 +141,9 @@ func treateCreatePaymentInstrumentResponse(response *cybersourcerest.RequestResp
 }
 
 // RetrievePaymentInstrument - Return the payment instrument json
-func RetrievePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredential, paymentInstrumentID string) (*PaymentInstrumentResponse, string, error) {
+func RetrievePaymentInstrument(credentials *commons.CyberSourceCredential, paymentInstrumentID string) (*PaymentInstrumentResponse, string, error) {
 
-	requestResp, err := cybersourcerest.RestFullGET(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
+	requestResp, err := rest.RestFullGET(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrievePaymentInstrument - Error executing GET request.")
@@ -155,7 +154,7 @@ func RetrievePaymentInstrument(credentials *cybersourcecommons.CyberSourceCreden
 }
 
 // treateRetrievePaymentInstrumentResponse - Verify the HTTP Response and treat the get response.
-func treateRetrievePaymentInstrumentResponse(response *cybersourcerest.RequestResponse) (*PaymentInstrumentResponse, string, error) {
+func treateRetrievePaymentInstrumentResponse(response *rest.RequestResponse) (*PaymentInstrumentResponse, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
@@ -173,9 +172,9 @@ func treateRetrievePaymentInstrumentResponse(response *cybersourcerest.RequestRe
 }
 
 // DeletePaymentInstrument - Deletes the payment instrument
-func DeletePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredential, paymentInstrumentID string) (bool, string, error) {
+func DeletePaymentInstrument(credentials *commons.CyberSourceCredential, paymentInstrumentID string) (bool, string, error) {
 
-	response, err := cybersourcerest.RestFullDELETE(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
+	response, err := rest.RestFullDELETE(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrievePaymentInstrument - Error executing Delete request.")
@@ -186,7 +185,7 @@ func DeletePaymentInstrument(credentials *cybersourcecommons.CyberSourceCredenti
 }
 
 // treatePaymentInstrumentDeleteResponse - Verify the HTTP Response and treat the delete response.
-func treatePaymentInstrumentDeleteResponse(response *cybersourcerest.RequestResponse) (bool, string, error) {
+func treatePaymentInstrumentDeleteResponse(response *rest.RequestResponse) (bool, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 		return false, response.Body, nil
 	}

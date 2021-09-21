@@ -1,34 +1,33 @@
 package transaction
 
 import (
+	"Go-dreamBridgeCybersource/rest/commons"
 	"time"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
 )
 
 // Transaction - Transaction structure
 type Transaction struct {
-	ID                                *string                                               `json:"id,omitempty"`
-	RootID                            *string                                               `json:"rootId,omitempty"` //-
-	ReconciliationID                  *string                                               `json:"reconciliationId,omitempty"`
-	SubmitTimeUtc                     *time.Time                                            `json:"submitTimeUtc,omitempty"`
-	MerchantID                        *string                                               `json:"merchantId,omitempty"`             //-
-	ApplicationInformation            *ApplicationInformation                               `json:"applicationInformation,omitempty"` //-
-	BuyerInformation                  *cybersourcecommons.BuyerInformation                  `json:"buyerInformation,omitempty"`
-	ClientReferenceInformation        *cybersourcecommons.ClientReferenceInformation        `json:"clientReferenceInformation,omitempty"`
-	ConsumerAuthenticationInformation *cybersourcecommons.ConsumerAuthenticationInformation `json:"consumerAuthenticationInformation,omitempty"`
-	DeviceInformation                 *cybersourcecommons.DeviceInformation                 `json:"deviceInformation,omitempty"`
-	InstallmentInformation            *cybersourcecommons.InstallmentInformation            `json:"installmentInformation,omitempty"`
-	FraudMarkingInformation           *FraudMarkingInformation                              `json:"fraudMarkingInformation,omitempty"` //-
-	MerchantInformation               *cybersourcecommons.MerchantInformation               `json:"merchantInformation,omitempty"`
-	OrderInformation                  *cybersourcecommons.OrderInformation                  `json:"orderInformation,omitempty"`
-	PaymentInformation                *cybersourcecommons.PaymentInformation                `json:"paymentInformation,omitempty"`
-	ProcessingInformation             *cybersourcecommons.ProcessingInformation             `json:"processingInformation,omitempty"`
-	ProcessorInformation              *cybersourcecommons.ProcessorInformation              `json:"processorInformation,omitempty"`
-	PointOfSaleInformation            *cybersourcecommons.PointOfSaleInformation            `json:"pointOfSaleInformation,omitempty"`
-	RiskInformation                   *RiskInformation                                      `json:"riskInformation,omitempty"`   //-
-	SenderInformation                 *SenderInformation                                    `json:"senderInformation,omitempty"` //-
-	Links                             *cybersourcecommons.Links                             `json:"_links,omitempty"`
+	ID                                *string                                    `json:"id,omitempty"`
+	RootID                            *string                                    `json:"rootId,omitempty"` //-
+	ReconciliationID                  *string                                    `json:"reconciliationId,omitempty"`
+	SubmitTimeUtc                     *time.Time                                 `json:"submitTimeUtc,omitempty"`
+	MerchantID                        *string                                    `json:"merchantId,omitempty"`             //-
+	ApplicationInformation            *ApplicationInformation                    `json:"applicationInformation,omitempty"` //-
+	BuyerInformation                  *commons.BuyerInformation                  `json:"buyerInformation,omitempty"`
+	ClientReferenceInformation        *commons.ClientReferenceInformation        `json:"clientReferenceInformation,omitempty"`
+	ConsumerAuthenticationInformation *commons.ConsumerAuthenticationInformation `json:"consumerAuthenticationInformation,omitempty"`
+	DeviceInformation                 *commons.DeviceInformation                 `json:"deviceInformation,omitempty"`
+	InstallmentInformation            *commons.InstallmentInformation            `json:"installmentInformation,omitempty"`
+	FraudMarkingInformation           *FraudMarkingInformation                   `json:"fraudMarkingInformation,omitempty"` //-
+	MerchantInformation               *commons.MerchantInformation               `json:"merchantInformation,omitempty"`
+	OrderInformation                  *commons.OrderInformation                  `json:"orderInformation,omitempty"`
+	PaymentInformation                *commons.PaymentInformation                `json:"paymentInformation,omitempty"`
+	ProcessingInformation             *commons.ProcessingInformation             `json:"processingInformation,omitempty"`
+	ProcessorInformation              *commons.ProcessorInformation              `json:"processorInformation,omitempty"`
+	PointOfSaleInformation            *commons.PointOfSaleInformation            `json:"pointOfSaleInformation,omitempty"`
+	RiskInformation                   *RiskInformation                           `json:"riskInformation,omitempty"`   //-
+	SenderInformation                 *SenderInformation                         `json:"senderInformation,omitempty"` //-
+	Links                             *commons.Links                             `json:"_links,omitempty"`
 }
 
 // Applications - Applications

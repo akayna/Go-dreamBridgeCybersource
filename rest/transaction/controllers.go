@@ -1,25 +1,24 @@
 package transaction
 
 import (
+	"Go-dreamBridgeCybersource/rest"
+	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"log"
-
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcecommons"
-	"github.com/rafaelcunha/Go-CyberSource/cybersourcerest"
 )
 
 var transactionsEndpoint = "/tss/v2/transactions/"
 
 // GetTransactionByID - Retrieves a transaction info by its id
-func GetTransactionByID(credentials *cybersourcecommons.CyberSourceCredential, transactionID string) (*Transaction, string, error) {
+func GetTransactionByID(credentials *commons.CyberSourceCredential, transactionID string) (*Transaction, string, error) {
 	transactionsEndpoint := transactionsEndpoint + transactionID
 	return GetTransaction(credentials, transactionsEndpoint)
 }
 
 // GetTransaction - Retrieves a transaction
-func GetTransaction(credentials *cybersourcecommons.CyberSourceCredential, endpointURL string) (*Transaction, string, error) {
+func GetTransaction(credentials *commons.CyberSourceCredential, endpointURL string) (*Transaction, string, error) {
 
-	transactionRawResp, err := cybersourcerest.RestFullGET(credentials, endpointURL)
+	transactionRawResp, err := rest.RestFullGET(credentials, endpointURL)
 
 	if err != nil {
 		log.Println("cybersourcegateway - GetTransaction - Error executing GET request.")
@@ -33,7 +32,7 @@ func GetTransaction(credentials *cybersourcecommons.CyberSourceCredential, endpo
 }
 
 // treatsGetTransactionResponse - Verify and treat the HTTP GET Response of a get transaction
-func treatsGetTransactionResponse(response *cybersourcerest.RequestResponse) (*Transaction, string, error) {
+func treatsGetTransactionResponse(response *rest.RequestResponse) (*Transaction, string, error) {
 	if response.StatusCode > 299 || response.StatusCode < 200 {
 
 		return nil, response.Body, nil
