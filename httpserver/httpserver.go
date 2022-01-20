@@ -73,8 +73,6 @@ func main() {
 
 	// Credenciais teste
 	err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "rafaelcunha.json", &credentials)
-	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "ebanx.json", &credentials)
-	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "vileve.json", &credentials)
 
 	// Credenciais live
 	//err := jsonfile.ReadJSONFile2("/home/rafaelsonhador/Documents/Credenciais Cybersource/", "cybsbrdemo.json", &credentials)
@@ -199,7 +197,8 @@ func getFlexAPIKey(w http.ResponseWriter, req *http.Request) {
 
 // getFlexAPIKey - Generate ont key for the FlexAPI and send it to the browser
 func getFlexAPIKeyCrypto(w http.ResponseWriter, req *http.Request) {
-	generatedKey, msg, err := flexAPI.GenerateRsaOaep256Key(&credentials.CyberSourceCredential, nil)
+	var origin = "https://www.teste.com"
+	generatedKey, msg, err := flexAPI.GenerateRsaOaep256Key(&credentials.CyberSourceCredential, &origin)
 
 	if err != nil {
 		log.Println("main - Error generating key.")

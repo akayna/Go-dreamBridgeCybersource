@@ -23,7 +23,7 @@ func GetHeader(credentials *commons.CyberSourceCredential, host, payload, verb, 
 	var header RestfullHeader
 
 	// Get actual system time into the RFC1123 format
-	var actualDateTime = timeutils.GetActualGMTDate()
+	var actualDateTime = timeutils.GetActualGMTDate()//"Wed, 13 Oct 2021 12:48:33 GMT"
 	header.Date = actualDateTime
 
 	// Set the MID
@@ -124,7 +124,7 @@ func calculateSignature(sharedSecretKey, host, date, target, mid, verb, digestSt
 func (header *RestfullHeader) GetMapString() map[string]string {
 	headerMap := map[string]string{
 		"v-c-merchant-id": header.MerchantID,
-		"Date":            header.Date,
+		"date":            header.Date,
 		"host":            header.Host,
 		"digest":          header.Digest,
 		"signature":       header.Signature.getString(),
@@ -138,8 +138,6 @@ func (header *RestfullHeader) GetMapString() map[string]string {
 // GetString - Returns the string to the signature header field
 func (header headerSignature) getString() string {
 	signature := "keyid=\"" + header.APIKey + "\", algorithm=\"" + header.Algorithm + "\", headers=\"" + header.Headers + "\", signature=\"" + header.Signature + "\""
-
-	//fmt.Println("signature:\n" + signature)
 
 	return signature
 }

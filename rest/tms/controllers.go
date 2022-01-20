@@ -7,13 +7,14 @@ import (
 	"log"
 )
 
-var tmsPaymentInstrumentEndpoint = "/tms/v1/paymentinstruments"
-var tmsInstrumentIdentifierEndpoint = "/tms/v1/instrumentidentifiers"
+var tmsPaymentInstrumentEndpoint_v1 = "/tms/v1/paymentinstruments"
+var tmsInstrumentIdentifierEndpoint_v1 = "/tms/v1/instrumentidentifiers"
+var tmsTokensEndpoint_v2 = "/tms/v2/tokens"
 
 // DeleteInstrumentIdentifier - Deletes the instrument identifier
 func DeleteInstrumentIdentifier(credentials *commons.CyberSourceCredential, instrumentIdentifierID string) (bool, string, error) {
 
-	response, err := rest.RestFullDELETE(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
+	response, err := rest.RestFullDELETE(credentials, (tmsInstrumentIdentifierEndpoint_v1 + "/" + instrumentIdentifierID))
 
 	if err != nil {
 		log.Println("cybersourcetms - DeleteInstrumentIdentifier - Error executing Delete request.")
@@ -35,7 +36,7 @@ func treateInstrumentIdentifierDeleteResponse(response *rest.RequestResponse) (b
 
 // RetrieveInstrumentIdentifier - Retrieves the instrument identifier
 func RetrieveInstrumentIdentifier(credentials *commons.CyberSourceCredential, instrumentIdentifierID string) (*InstrumentIdentifierResponse, string, error) {
-	requestResp, err := rest.RestFullGET(credentials, (tmsInstrumentIdentifierEndpoint + "/" + instrumentIdentifierID))
+	requestResp, err := rest.RestFullGET(credentials, (tmsInstrumentIdentifierEndpoint_v1 + "/" + instrumentIdentifierID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrieveInstrumentIdentifier - Error executing GET request.")
@@ -72,7 +73,7 @@ func CreateInstrumentIdentifier(credentials *commons.CyberSourceCredential, inst
 		return nil, "Error converting struct to json string.", err
 	}
 
-	createResp, err := rest.RestFullPOST(credentials, tmsInstrumentIdentifierEndpoint, string(payload))
+	createResp, err := rest.RestFullPOST(credentials, tmsInstrumentIdentifierEndpoint_v1, string(payload))
 
 	if err != nil {
 		log.Println("cybersourcetms - CreateInstrumentIdentifier - Error executing POST request.")
@@ -111,7 +112,7 @@ func CreatePaymentInstrument(credentials *commons.CyberSourceCredential, payment
 
 	//fmt.Println("Payload:\n" + string(payload))
 
-	createResp, err := rest.RestFullPOST(credentials, tmsPaymentInstrumentEndpoint, string(payload))
+	createResp, err := rest.RestFullPOST(credentials, tmsPaymentInstrumentEndpoint_v1, string(payload))
 
 	if err != nil {
 		log.Println("cybersourcetms - CeratePaymentInstrument - Error executing POST request.")
@@ -143,7 +144,7 @@ func treateCreatePaymentInstrumentResponse(response *rest.RequestResponse) (*Pay
 // RetrievePaymentInstrument - Return the payment instrument json
 func RetrievePaymentInstrument(credentials *commons.CyberSourceCredential, paymentInstrumentID string) (*PaymentInstrumentResponse, string, error) {
 
-	requestResp, err := rest.RestFullGET(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
+	requestResp, err := rest.RestFullGET(credentials, (tmsPaymentInstrumentEndpoint_v1 + "/" + paymentInstrumentID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrievePaymentInstrument - Error executing GET request.")
@@ -174,7 +175,7 @@ func treateRetrievePaymentInstrumentResponse(response *rest.RequestResponse) (*P
 // DeletePaymentInstrument - Deletes the payment instrument
 func DeletePaymentInstrument(credentials *commons.CyberSourceCredential, paymentInstrumentID string) (bool, string, error) {
 
-	response, err := rest.RestFullDELETE(credentials, (tmsPaymentInstrumentEndpoint + "/" + paymentInstrumentID))
+	response, err := rest.RestFullDELETE(credentials, (tmsPaymentInstrumentEndpoint_v1 + "/" + paymentInstrumentID))
 
 	if err != nil {
 		log.Println("cybersourcetms - RetrievePaymentInstrument - Error executing Delete request.")
@@ -192,4 +193,16 @@ func treatePaymentInstrumentDeleteResponse(response *rest.RequestResponse) (bool
 
 	return true, "Payment instrument deleted.", nil
 
+}
+
+// GenerateCryptogram - Execute the call to generate one cryptogram from an instrument identifier
+func GenerateCryptogram(credentials *commons.CyberSourceCredential, instrumentIdentifierID string) (string, string, error) {
+	createCryptogramResp, err := rest.RestFullPOST(credentials, (tmsTokensEndpoint_v2 + "/" + instrumentIdentifierID + "/cryptograms"), "{}")
+
+	if err != nil {
+		log.Println("cybersourcetms - GenerateCryptogram - Error creating a cryptogram.")
+		return "", "Error executing GET request.", err
+	}
+
+	return createCryptogramResp.Body, "Cryptogram generated.", nil
 }

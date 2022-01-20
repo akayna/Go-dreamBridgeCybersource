@@ -4,6 +4,7 @@ import "Go-dreamBridgeCybersource/rest/commons"
 
 // CreateInstrumentIdentifierRequest - Contains all fields to request an Instrument Identifier Token
 type CreateInstrumentIdentifierRequest struct {
+	Type *string       `json:"type,omitempty"`
 	Card *commons.Card `json:"card,omitempty"`
 }
 

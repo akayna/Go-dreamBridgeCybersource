@@ -37,7 +37,10 @@ function generateCardToken() {
       keyId: document.getElementById('keyID').value, 
       cardInfo: {
           cardNumber: document.getElementById("cardNumber").value,
-          cardType: document.getElementById("type").value
+          cardType: document.getElementById("type").value,
+          expirationMonth: "11",
+          expirationYear: "2022",
+          securityCode: "942"
       }
   };
 
@@ -64,9 +67,9 @@ function generateCardToken() {
       console.log("Response: ");
       console.log(response);
 
-      setCardToken(response.token);
+      setCardToken(response._embedded.icsReply.instrumentIdentifier.id);
 
-      window.alert("CardToken gerado com sucesso:\n"+response.token);
+      window.alert("CardToken gerado com sucesso:\n"+response._embedded.icsReply.instrumentIdentifier.id);
 
     }).fail(failResponse);
 
@@ -119,7 +122,7 @@ function generateCardTokenCrypto() {
     encryptionType: 'RsaOaep256', // ensure this matches the encryptionType you specified when creating your key
     cardInfo: {
       cardNumber: document.getElementById("cardNumber").value,
-      cardType: document.getElementById("type").value
+      cardType: document.getElementById("type").value,
     }
   };
  
@@ -132,9 +135,9 @@ function generateCardTokenCrypto() {
       console.log("Response object:");
       console.log(response);
   
-      setCardToken(response.token);
+      setCardToken(response._embedded.icsReply.instrumentIdentifier.id);
   
-      window.alert("CardToken gerado com sucesso:\n"+response.token);
+      window.alert("CardToken gerado com sucesso:\n"+response._embedded.icsReply.instrumentIdentifier.id);
     } 
   });
 }
