@@ -1,6 +1,6 @@
 package tms
 
-import "Go-dreamBridgeCybersource/rest/commons"
+import "github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 
 // CreateInstrumentIdentifierRequest - Contains all fields to request an Instrument Identifier Token
 type CreateInstrumentIdentifierRequest struct {

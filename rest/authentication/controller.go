@@ -1,13 +1,14 @@
 package authentication
 
 import (
-	"Go-dreamBridgeCybersource/rest/commons"
-	"Go-dreamBridgeUtils/digest"
-	"Go-dreamBridgeUtils/timeutils"
 	"errors"
 	"fmt"
 	"log"
 	"strings"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
+	"github.com/akayna/Go-dreamBridgeUtils/digest"
+	"github.com/akayna/Go-dreamBridgeUtils/timeutils"
 )
 
 // Constants
@@ -23,7 +24,7 @@ func GetHeader(credentials *commons.CyberSourceCredential, host, payload, verb, 
 	var header RestfullHeader
 
 	// Get actual system time into the RFC1123 format
-	var actualDateTime = timeutils.GetActualGMTDate()//"Wed, 13 Oct 2021 12:48:33 GMT"
+	var actualDateTime = timeutils.GetActualGMTDate() //"Wed, 13 Oct 2021 12:48:33 GMT"
 	header.Date = actualDateTime
 
 	// Set the MID

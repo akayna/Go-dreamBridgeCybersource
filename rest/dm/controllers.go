@@ -1,10 +1,11 @@
 package dm
 
 import (
-	"Go-dreamBridgeCybersource/rest"
-	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"log"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 )
 
 var createCaseEndpoint = "/risk/v1/decisions"

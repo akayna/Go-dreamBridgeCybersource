@@ -1,10 +1,11 @@
 package tms
 
 import (
-	"Go-dreamBridgeCybersource/rest"
-	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"log"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 )
 
 var tmsPaymentInstrumentEndpoint_v1 = "/tms/v1/paymentinstruments"

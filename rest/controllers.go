@@ -1,12 +1,13 @@
 package rest
 
 import (
-	"Go-dreamBridgeCybersource/rest/authentication"
-	"Go-dreamBridgeCybersource/rest/commons"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/authentication"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 )
 
 var host = "apitest.cybersource.com" // Ambiente de teste

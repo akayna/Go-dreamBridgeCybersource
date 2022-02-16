@@ -1,10 +1,6 @@
 package main
 
 import (
-	"Go-dreamBridgeCybersource/rest/commons"
-	"Go-dreamBridgeCybersource/rest/flexAPI"
-	"Go-dreamBridgeCybersource/rest/threeds"
-	"Go-dreamBridgeUtils/jsonfile"
 	"context"
 	"encoding/json"
 	"flag"
@@ -19,6 +15,11 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/flexAPI"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/threeds"
+	"github.com/akayna/Go-dreamBridgeUtils/jsonfile"
 )
 
 type middleware func(http.Handler) http.Handler

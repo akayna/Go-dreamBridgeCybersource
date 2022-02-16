@@ -1,11 +1,12 @@
 package threeds
 
 import (
-	"Go-dreamBridgeCybersource/rest"
-	"Go-dreamBridgeCybersource/rest/commons"
 	"encoding/json"
 	"fmt"
 	"log"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 )
 
 var setupPayerAuthEndpoint = "/risk/v1/authentication-setups"

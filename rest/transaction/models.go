@@ -1,8 +1,9 @@
 package transaction
 
 import (
-	"Go-dreamBridgeCybersource/rest/commons"
 	"time"
+
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 )
 
 // Transaction - Transaction structure
