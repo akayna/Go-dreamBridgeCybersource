@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
+	"github.com/akayna/Go-dreamBridgeCybersource/utils"
 	"github.com/akayna/Go-dreamBridgeUtils/digest"
 	"github.com/akayna/Go-dreamBridgeUtils/timeutils"
 )
@@ -111,7 +112,7 @@ func calculateSignature(sharedSecretKey, host, date, target, mid, verb, digestSt
 
 	fmt.Println("Signature String: " + signatureString)
 
-	signature, err := digest.GenerateSignature(sharedSecretKey, signatureString)
+	signature, err := utils.GenerateSignature(sharedSecretKey, signatureString)
 	if err != nil {
 		log.Println("cybersourcerest - calculateSignature: Error generating the signature param.")
 		log.Println("error: ", err)
