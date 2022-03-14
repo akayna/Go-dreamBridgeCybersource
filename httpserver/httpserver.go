@@ -325,7 +325,7 @@ func doEnrollment(w http.ResponseWriter, req *http.Request) {
 	var merchantURL = "https://merchantrul.com"
 	var mcc = "5399"
 
-	var returnUrl = "http://localhost:5000/validate"
+	var returnUrl = "https://webhook.dreambridge.net/webhook"
 
 	var ipAddress = req.RemoteAddr
 	var httpAcceptBrowserValueStr = "*/*"

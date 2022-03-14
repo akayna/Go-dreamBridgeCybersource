@@ -64,7 +64,7 @@ function setupPayerAuth(setupPayerAuthData) {
     disableAuthFields();
 
     var payload = JSON.stringify(setupPayerAuthData);
-    console.log("Payload: " + payload);
+    console.log("SetupPayerAuth Payload: " + payload);
 
     var settings = {
         "async": false,
@@ -165,31 +165,30 @@ function challengeFormSend() {
 function createDeviceDataCollectionListener() {
     console.log('createDeviceDataCollectionListener:');
 
-    window.addEventListener("message", (event) => {
+    window.addEventListener("message", function (event) {
 
-        console.log('window event listener: ');
-        console.log(event);
+            console.log('window event listener: ');
+            console.log(event);
 
-        if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
-        //if (event.origin === "https://centinelapi.cardinalcommerce.com") {
+            if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
+                //if (event.origin === "https://centinelapi.cardinalcommerce.com") {
+                var data = JSON.parse(event.data);
+                console.log('Merchant received a message:', data);
 
-            let data = JSON.parse(event.data);
-            console.log('Merchant received a message:', data);
+                if (data !== undefined && data.Status) {
+                    console.log('Songbird ran DF successfully');
 
-            if (data !== undefined && data.Status) {
-                console.log('Songbird ran DF successfully');
+                    // Initiate enrollment process
+                    doEnrollment();
+                } else {
+                    console.log('Message from different type.');
+                }
 
-                // Initiate enrollment process
-                doEnrollment();
             } else {
-                console.log('Message from different type.');
+                console.log('Message from different origin.');
             }
 
-        } else{
-            console.log('Message from different origin.');
-        }
-
-    }, false);
+        }, false);
 }
 
 function createChallengeValidatedEventLiestener() {
@@ -197,10 +196,10 @@ function createChallengeValidatedEventLiestener() {
 
     var challengeIframe = document.getElementById("step-up-iframe");
 
-    challengeIframe.addEventListener("click", (event) => {
-        console.log('Event:');
-        console.log(event);
-    }, false);
+    challengeIframe.addEventListener("click", function (event) {
+            console.log('Event:');
+            console.log(event);
+        }, false);
 }
 
 function doEnrollment() {
@@ -276,8 +275,9 @@ function treatEnrollmentResponse(enrollmentResponse) {
               var stepUpForm = document.querySelector('#step-up-form');
 
               if (stepUpForm) {
-                  // Convert the pareq to base64
+                  // Convert the pareq from base64 to string
                   pareqString = atob(objEnrollment.consumerAuthenticationInformation.pareq);
+
                   var objPareq = JSON.parse(pareqString);
           
                   console.log("Pareq: " + pareqString);
@@ -287,7 +287,7 @@ function treatEnrollmentResponse(enrollmentResponse) {
                   stepUpForm.setAttribute('Action',objEnrollment.consumerAuthenticationInformation.stepUpUrl);
           
                   var inputs = stepUpForm.elements;
-                  var JWTInput = inputs['JWT_step'];
+                  var JWTInput = inputs.JWT_step;
           
                   JWTInput.setAttribute('value',objEnrollment.consumerAuthenticationInformation.accessToken);
 
@@ -446,7 +446,7 @@ function getAuthenticationData() {
 function mountDeviceFingerprint() {
     console.log("mountDeviceFingerprint.");
 
-    var deviceInformation
+    var deviceInformation;
 
     httpBrowserJavaEnabledBool = "";
     if (navigator.javaEnabled() == true)
