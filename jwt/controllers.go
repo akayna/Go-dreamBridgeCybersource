@@ -1,12 +1,12 @@
 package jwt
 
 import (
-	"Go-dreamBridgeUtils/timeutils"
 	"encoding/json"
 	"fmt"
 	"log"
 	"time"
 
+	"github.com/akayna/Go-dreamBridgeUtils/timeutils"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 

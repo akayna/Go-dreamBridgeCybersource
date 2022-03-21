@@ -1,8 +1,7 @@
 package jwt
 
 import (
-	"Go-dreamBridgeCybersource/rest/commons"
-
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 	jwt "github.com/dgrijalva/jwt-go"
 )
 

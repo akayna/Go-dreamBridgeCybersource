@@ -111,6 +111,7 @@ function enableAuthFields() {
     document.getElementById("expYear").disabled = false;
     document.getElementById("type").disabled = false;
     document.getElementById("overridePaymentMethod").disabled = false;
+    document.getElementById("cpfNumber").disabled = false;
     document.getElementById("authBtn").disabled = false;
     document.getElementById("referenceCode").disabled = false;
     document.getElementById("firstName").disabled = false;
@@ -133,6 +134,7 @@ function disableAuthFields() {
     document.getElementById("expYear").disabled = true;
     document.getElementById("type").disabled = true;
     document.getElementById("overridePaymentMethod").disabled = true;
+    document.getElementById("cpfNumber").disabled = true;
     document.getElementById("authBtn").disabled = true;
     document.getElementById("referenceCode").disabled = true;
     document.getElementById("firstName").disabled = true;
@@ -430,6 +432,7 @@ function getAuthenticationData() {
             },
         },
         buyerInformation: {
+            merchantCustomerId: document.getElementById("cpfNumber").value,
             mobilePhone: document.getElementById("mobilePhone").value,
         },
         consumerAuthenticationInformation: {

@@ -42,7 +42,7 @@ func GetHeader(credentials *commons.CyberSourceCredential, host, payload, verb, 
 		header.ContentType = "application/json"
 
 		// Generate the digest signature
-		genDigest, err := digest.GenerateDigest(payload)
+		genDigest, err := digest.GenerateDigestSHA256(payload)
 		if err != nil {
 			log.Println("cybersourcerest - getHeader: Error generating Digest signature.")
 			return nil, err
