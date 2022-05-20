@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +19,7 @@ import (
 
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/flexAPI"
+	"github.com/akayna/Go-dreamBridgeCybersource/rest/microform"
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/threeds"
 	"github.com/akayna/Go-dreamBridgeUtils/jsonfile"
 )
@@ -106,6 +108,7 @@ func main() {
 
 	// Microform services
 	router.HandleFunc("/getMicroformContext", getMicroformContext)
+	router.HandleFunc("/validateMicroformToken", validateMicroformToken)
 
 	// 3DS
 	router.HandleFunc("/setupPayerAuth", setupPayerAuth)
@@ -228,30 +231,51 @@ func getFlexAPIKeyCrypto(w http.ResponseWriter, req *http.Request) {
 
 // getMicroformKey - Generate one microfom key and send back to the frontend
 func getMicroformContext(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("getMicroformContext")
+	log.Println("getMicroformContext")
 
-	var targetOrigin = ""
-	if req.TLS == nil {
-		targetOrigin += "http://"
-	} else {
-		targetOrigin += "https://"
-	}
+	var targetOrigin []string
 
-	targetOrigin += req.Host
+	targetOrigin = append(targetOrigin, "http://localhost:5000")
 
-	fmt.Println("targetOrigin: " + targetOrigin)
-
-	generatedKey, msg, err := flexAPI.GenerateMicroformKey(&credentials.CyberSourceCredential, targetOrigin)
+	context, message, err := microform.GenerateMicroformContext(&credentials.CyberSourceCredential, targetOrigin)
 
 	if err != nil {
-		log.Println("getMicroformContext - Error generating key.")
-		log.Println(err)
+		log.Println("getMicroformContext - Error getting context.")
+		log.Println("getMicroformContext - Message: ", message)
+		log.Println("Error: ", err)
+		http.Error(w, message, http.StatusInternalServerError)
 		return
 	}
 
-	log.Println(msg)
+	w.Write([]byte(context))
+}
 
-	w.Write([]byte(*generatedKey.KeyID))
+func validateMicroformToken(w http.ResponseWriter, req *http.Request) {
+	log.Println("validateMicroformToken")
+	defer req.Body.Close()
+	body, err := ioutil.ReadAll(req.Body)
+
+	if err != nil {
+		log.Println("main.validateMicroformToken - Error reading POST request body.")
+		w.Write([]byte("Error reading POST request body."))
+		return
+	}
+
+	validated, cyberToken, err := microform.ValidateToken(string(body))
+
+	if err != nil {
+		log.Println("main.validateMicroformToken - Error validating token received.")
+		log.Println(err)
+		w.Write([]byte(cyberToken))
+	}
+
+	if validated {
+		log.Println("main.validateMicroformToken - Token validated.")
+		log.Println("main.validateMicroformToken - Token Cybersource: ", cyberToken)
+		w.Write([]byte("Token validated: " + cyberToken))
+	} else {
+		w.Write([]byte("Token not validated."))
+	}
 }
 
 // setupPayerAuth - Execute the setup payer auth call to Cubersource API

@@ -5,7 +5,6 @@ function setupMicroform() {
     var flexResponse = document.querySelector('#flexresponse');
     var expMonth = document.querySelector('#expMonth');
     var expYear = document.querySelector('#expYear');
-    var cardType = document.querySelector('#type');
     var errorsOutput = document.querySelector('#errors-output');
 
     // the capture context that was requested server-side for this transaction
@@ -27,7 +26,7 @@ function setupMicroform() {
     // setup
     var flex = new Flex(captureContext);
     var microform = flex.microform({ styles: myStyles });
-    var number = microform.createField('number', { placeholder: 'Enter card number' });
+    var number = microform.createField('number', { placeholder: 'Digite o número do cartão' });
     var securityCode = microform.createField('securityCode', { placeholder: '••••' });
 
     number.load('#number-container');
@@ -38,8 +37,7 @@ function setupMicroform() {
 
         var options = {    
           expirationMonth: expMonth.value,  
-          expirationYear: expYear.value,
-          type: cardType.value
+          expirationYear: expYear.value
         };
 
         microform.createToken(options, function (err, token) {
@@ -54,6 +52,8 @@ function setupMicroform() {
             console.log(JSON.stringify(token));
             flexResponse.value = JSON.stringify(token);
 
+            validateToken(token);
+
             //console.log("Status: "+ status);
 
             //console.log("Response: ");
@@ -66,6 +66,37 @@ function setupMicroform() {
         });
       });
 }
+
+function validateToken(token) {
+  console.log("validateToken");
+
+  var settings = {
+    "async": false,
+    "crossDomain": true,
+    "url": "http://localhost:5000/validateMicroformToken",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/jwt;charset=UTF-8",
+        "Accept": "*/*",
+        "Cache-Control": "no-cache",
+        "cache-control": "no-cache"
+    },
+    "processData": false,
+    "data": token,
+  };
+
+  $.ajax(settings).done(function (response, status) {
+
+    console.log("Status: "+ status);
+
+    console.log("Context: "+ response);
+
+    return false;
+  }).fail(failResponse);
+
+  return false;
+}
+
 
 function getMicroformContext() {
     console.log("getMicroformContext");
@@ -102,7 +133,6 @@ function getMicroformContext() {
 function enableInputs() {
     document.getElementById("expMonth").disabled = false;
     document.getElementById("expYear").disabled = false;
-    document.getElementById("type").disabled = false;
     document.getElementById("tokenizeBtn").disabled = false;
   }
   
@@ -110,6 +140,5 @@ function enableInputs() {
   function disableInputs() {
     document.getElementById("expMonth").disabled = true;
     document.getElementById("expYear").disabled = true;
-    document.getElementById("type").disabled = true;
     document.getElementById("tokenizeBtn").disabled = true;
   }

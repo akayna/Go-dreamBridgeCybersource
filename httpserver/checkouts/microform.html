@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script src="https://flex.cybersource.com/cybersource/assets/microform/0.11.2/flex-microform.min.js"></script>
+  <script src="https://flex.cybersource.com/cybersource/assets/microform/0.11/flex-microform.min.js"></script>
   <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script language="javascript" type="text/javascript" src="../JavaScripts/microform.js"></script>
   <script language="javascript" type="text/javascript" src="../JavaScripts/utils.js"></script>
@@ -33,17 +33,17 @@
           <form action="token.php" id="my-sample-form" method="post">
               <div class="form-group">
 
-                  <label id="cardNumber-label">Card Number</label>
+                  <label id="cardNumber-label">Número do Cartão</label>
                   <div id="number-container" class="form-control"></div>
 
-                  <label for="securityCode-container">Security Code</label>
+                  <label for="securityCode-container">Código de Segurança</label>
                   <div id="securityCode-container" class="form-control"></div>
                   
               </div>
 
               <div class="form-row">
                   <div class="form-group col-md-6">
-                      <label for="expMonth">Expiry month</label>
+                      <label for="expMonth">Mês de Expiração</label>
                       <select id="expMonth" class="form-control">
                           <option>01</option>
                           <option>02</option>
@@ -60,24 +60,13 @@
                       </select>
                   </div>
                   <div class="form-group col-md-6">
-                      <label for="expYear">Expiry year</label>
+                      <label for="expYear">Ano de Expiração</label>
                       <select id="expYear" class="form-control">
-                          <option>2022</option>
                           <option>2023</option>
                           <option>2024</option>
                           <option>2025</option>
+                          <option>2026</option>
                       </select>
-                  </div>
-
-                  <div class="form-group col-md-6">
-                    <label for="type">Type</label>
-                    <select id="type" name="type" disabled>
-                      <option value="001">Visa</option>
-                      <option value="002">Master</option>
-                      <option value="003">Amex</option>
-                      <option value="004">Discover</option>
-                      <option value="054">Elo</option>
-                    </select>
                   </div>
               </div>
 

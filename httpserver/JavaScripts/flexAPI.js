@@ -38,9 +38,6 @@ function generateCardToken() {
       cardInfo: {
           cardNumber: document.getElementById("cardNumber").value,
           cardType: document.getElementById("type").value,
-          expirationMonth: "11",
-          expirationYear: "2022",
-          securityCode: "942"
       }
   };
 
@@ -116,7 +113,7 @@ function generateCardTokenCrypto() {
 
   var tokenKeyObj = JSON.parse(document.getElementById('keyID').value);
 
-  const options = {
+  var options = {
     kid: tokenKeyObj.keyId,
     keystore: tokenKeyObj.jwk,
     encryptionType: 'RsaOaep256', // ensure this matches the encryptionType you specified when creating your key

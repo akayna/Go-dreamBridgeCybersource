@@ -166,3 +166,29 @@ func RestFullGET(credentials *commons.CyberSourceCredential, endpoint string) (*
 
 	return &response, nil
 }
+
+// RestFullGETNoCerdentials - Execute a Get call to an endpoint without the credentials
+func RestFullGETNoCerdentials(endpoint string) (*RequestResponse, error) {
+	url := "https://" + host + endpoint
+
+	log.Println("Get URL: " + url)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Println("cybersourcerest - RestFullGETNoCerdentials - Error executing GET request.")
+		return nil, err
+	}
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	var response = RequestResponse{
+		StatusCode: res.StatusCode,
+		Body:       string(body),
+	}
+
+	return &response, nil
+}

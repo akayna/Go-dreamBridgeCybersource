@@ -10,12 +10,15 @@ import (
 // GenerateSignature - Generate the CyberSource signature using the key and data
 func GenerateSignature(key, data string) (string, error) {
 
+	//log.Println("Key base 64 encoded: " + key)
 	decodedKey, err := base64.StdEncoding.DecodeString(key)
 	if err != nil {
 		log.Println("digest - GenerateSignature: Error decoding key from Base64.")
 		log.Println("error:", err)
 		return "", err
 	}
+
+	//log.Println("Key base 64 decoded: " + string(decodedKey))
 
 	hasher := hmac.New(sha256.New, decodedKey)
 	hasher.Write([]byte(data))
