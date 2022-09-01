@@ -534,6 +534,7 @@ type ProcessingInformation struct {
 	BankTransferOptions        *BankTransferOptions        `json:"bankTransferOptions,omitempty"`
 	PurchaseOptions            *PurchaseOptions            `json:"purchaseOptions,omitempty"`
 	ElectronicBenefitsTransfer *ElectronicBenefitsTransfer `json:"electronicBenefitsTransfer,omitempty"`
+	ActionList                 []string                    `json:"actionList,omitempty"`
 }
 
 // Processor - Processor information

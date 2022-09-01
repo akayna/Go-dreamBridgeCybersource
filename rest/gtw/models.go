@@ -17,7 +17,7 @@ type Payment struct {
 	PaymentInformation                *commons.PaymentInformation                `json:"paymentInformation,omitempty"`
 	ProcessorInformation              *commons.ProcessorInformation              `json:"processorInformation,omitempty"`
 	ReconciliationID                  *string                                    `json:"reconciliationId,omitempty"`
-	ReversalAmountDetails             *commons.AmountDetails                     `json:"reversalAmountDetails,omitempty"`
+	ReversalInformation               *ReversalInformation                       `json:"reversalInformation,omitempty"`
 	StatusInformation                 *StatusInformation                         `json:"statusInformation,omitempty"`
 	OrderInformation                  *commons.OrderInformation                  `json:"orderInformation,omitempty"`
 	Status                            *string                                    `json:"status,omitempty"`
@@ -34,6 +34,12 @@ type Payment struct {
 	MerchantDefinedInformation        []MerchantDefinedInformation               `json:"merchantDefinedInformation,omitempty"`
 	InstallmentInformation            *commons.InstallmentInformation            `json:"installmentInformation,omitempty"`
 	Links                             *commons.Links                             `json:"_links,omitempty"`
+	Reason                            *string                                    `json:"reason,omitempty"`
+}
+
+// ReversalInformation
+type ReversalInformation struct {
+	AmountDetails *commons.AmountDetails `json:"amountDetails,omitempty"`
 }
 
 // IssuerInformation - Additional data about the issuer

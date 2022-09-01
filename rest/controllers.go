@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -142,10 +143,11 @@ func RestFullGET(credentials *commons.CyberSourceCredential, endpoint string) (*
 
 	headerMap := header.GetMapString()
 
+	log.Println("REQUEST HEADERS")
 	for key, val := range headerMap {
 		if val != "" {
 			req.Header.Add(key, val)
-			//fmt.Println(key + ": " + val)
+			fmt.Println(key + ": " + val)
 		}
 	}
 

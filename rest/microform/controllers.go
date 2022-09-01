@@ -9,15 +9,13 @@ import (
 	"github.com/akayna/Go-dreamBridgeCybersource/rest"
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 	"github.com/akayna/Go-dreamBridgeUtils/jwtutils"
-	"github.com/akayna/Go-dreamBridgeUtils/memorycache"
 	"github.com/dgrijalva/jwt-go"
 )
 
 var generateMicroformContext = "/microform/v2/sessions"
 var getJWTPublicKey = "/flex/v2/public-keys"
 
-var memoryCache *memorycache.MemoryCache
-var jwtIdMemoryIdMap = make(map[string]uint)
+var lastJwkStr string
 
 // GenerateMicroformContext - Calls the Cybersource API to generate de Microform context
 func GenerateMicroformContext(credentials *commons.CyberSourceCredential, targetOrigins []string) (string, string, error) {
@@ -69,18 +67,7 @@ func GenerateMicroformContext(credentials *commons.CyberSourceCredential, target
 		return "", "Error parsing JWK.", err
 	}
 
-	if memoryCache == nil {
-		memoryCache = memorycache.NewMemoryCache(256)
-	}
-
-	jwkId, err := memoryCache.StoreData("jwk", string(jwkStr))
-
-	if err != nil {
-		log.Println("microform - GenerateMicroformContext - Error saving JWK in memory cache.")
-		return "", "Error saving JWK in memory cache.", err
-	}
-
-	jwtIdMemoryIdMap[jwk["kid"].(string)] = jwkId
+	lastJwkStr = string(jwkStr)
 
 	return contextJWT, "", nil
 }
@@ -156,17 +143,10 @@ func ValidateToken(token string) (bool, string, error) {
 
 func getJWK(token *jwt.Token) (interface{}, error) {
 
-	kid := token.Header["kid"].(string)
-
-	memId := jwtIdMemoryIdMap[kid]
-	defer delete(jwtIdMemoryIdMap, kid)
-
-	jwkString := memoryCache.GetData("jwk", memId).(string)
-
 	// Converts the json jwk to rsa key
 	var jwk jwtutils.JSONKey
 
-	err := jwk.Populate(jwkString)
+	err := jwk.Populate(lastJwkStr)
 
 	if err != nil {
 		log.Println("microform.getJWK - Error parsing json to jwk.")

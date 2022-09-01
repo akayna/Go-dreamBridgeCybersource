@@ -9,7 +9,6 @@ import (
 	"github.com/akayna/Go-dreamBridgeCybersource/rest/commons"
 	"github.com/akayna/Go-dreamBridgeCybersource/utils"
 	"github.com/akayna/Go-dreamBridgeUtils/digest"
-	"github.com/akayna/Go-dreamBridgeUtils/timeutils"
 )
 
 // Constants
@@ -25,7 +24,7 @@ func GetHeader(credentials *commons.CyberSourceCredential, host, payload, verb, 
 	var header RestfullHeader
 
 	// Get actual system time into the RFC1123 format
-	var actualDateTime = timeutils.GetActualGMTDate() //"Wed, 13 Oct 2021 12:48:33 GMT"
+	var actualDateTime = "Thu, 14 Jul 2022 17:04:36 GMT" //timeutils.GetActualGMTDate() //"Wed, 13 Oct 2021 12:48:33 GMT"
 	header.Date = actualDateTime
 
 	// Set the MID
@@ -110,7 +109,7 @@ func calculateSignature(sharedSecretKey, host, date, target, mid, verb, digestSt
 
 	signatureString += "\nv-c-merchant-id: " + mid
 
-	fmt.Println("Signature String: " + signatureString)
+	fmt.Println("Signature String:\n" + signatureString)
 
 	signature, err := utils.GenerateSignature(sharedSecretKey, signatureString)
 	if err != nil {

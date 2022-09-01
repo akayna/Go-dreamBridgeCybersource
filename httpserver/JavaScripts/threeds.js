@@ -152,7 +152,7 @@ function disableAuthFields() {
 }
 
 function setRandomReferenceCode() {
-    document.getElementById("referenceCode").value = "ref_" + Date.now();
+    document.getElementById("referenceCode").value = "test_Rafael_" + Date.now();
 }
 
 function challengeFormSend() {
@@ -173,11 +173,11 @@ function createDeviceDataCollectionListener() {
             console.log(event);
 
             if (event.origin === "https://centinelapistag.cardinalcommerce.com") {
-                //if (event.origin === "https://centinelapi.cardinalcommerce.com") {
+            //if (event.origin === "https://centinelapi.cardinalcommerce.com") {
                 var data = JSON.parse(event.data);
                 console.log('Merchant received a message:', data);
 
-                if (data !== undefined && data.Status) {
+                if (data.Status) {
                     console.log('Songbird ran DF successfully');
 
                     // Initiate enrollment process
@@ -277,7 +277,8 @@ function treatEnrollmentResponse(enrollmentResponse) {
               var stepUpForm = document.querySelector('#step-up-form');
 
               if (stepUpForm) {
-                  // Convert the pareq from base64 to string
+                  
+                    // Convert the pareq from base64 to string
                   pareqString = atob(objEnrollment.consumerAuthenticationInformation.pareq);
 
                   var objPareq = JSON.parse(pareqString);

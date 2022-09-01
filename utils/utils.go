@@ -25,5 +25,7 @@ func GenerateSignature(key, data string) (string, error) {
 
 	signatureEncodedSTD := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 
+	log.Println("Calculated Signature econded:", signatureEncodedSTD)
+
 	return signatureEncodedSTD, nil
 }

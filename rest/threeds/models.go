@@ -13,7 +13,7 @@ const TransactionModeMOTO = "MOTO"
 const TransactionModeRETAIL = "RETAIL"
 
 // TransactionModeECOMMERCE - eCommerce
-const TransactionModeECOMMERCE = "ECOMMERCE"
+const TransactionModeECOMMERCE = "eCommerce" //"ECOMMERCE"
 
 // TransactionModeMOBILE - Mobile Device
 const TransactionModeMOBILE = "MOBILE"
